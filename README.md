@@ -30,6 +30,6 @@
 
 ## 引用
 
-1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B)
-2. [LangChain](https://github.com/hwchase17/langchain)
-3. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)
+1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B): ChatGLM-6B: 开源双语对话语言模型
+2. [LangChain](https://github.com/hwchase17/langchain): Building applications with LLMs through composability
+3. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM): 基于本地知识的 ChatGLM 应用实现
