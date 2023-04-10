@@ -4,6 +4,8 @@
 
 利用LangChain和ChatGLM-6B系列模型制作的Webui, 基于本地知识的大模型应用.
 
+目前支持上传 txt、docx、md 等文本格式文件.
+
 ## 使用方式
 
 1. git clone本项目: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`
