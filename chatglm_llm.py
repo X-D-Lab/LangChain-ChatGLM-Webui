@@ -49,7 +49,6 @@ class ChatGLM(LLM):
             temperature=self.temperature,
         )
         torch_gc()
-        print("history: ", self.history)
         if stop is not None:
             response = enforce_stop_tokens(response, stop)
         self.history = updated_history
