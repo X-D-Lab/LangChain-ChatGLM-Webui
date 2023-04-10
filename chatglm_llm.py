@@ -1,3 +1,6 @@
+"""
+copy from https://github.com/imClumsyPanda/langchain-ChatGLM
+"""
 import os
 from typing import List, Optional
 
@@ -20,24 +23,13 @@ def torch_gc():
             torch.cuda.ipc_collect()
 
 
-tokenizer = AutoTokenizer.from_pretrained(
-    "THUDM/chatglm-6b",
-    trust_remote_code=True
-)
-model = (
-    AutoModel.from_pretrained(
-        "THUDM/chatglm-6b",
-        trust_remote_code=True)
-    .half()
-    .cuda()
-)
-
-
 class ChatGLM(LLM):
     max_token: int = 10000
     temperature: float = 0.1
     top_p = 0.9
     history = []
+    tokenizer: object = None
+    model: object = None
 
     def __init__(self):
         super().__init__()
@@ -49,15 +41,30 @@ class ChatGLM(LLM):
     def _call(self,
               prompt: str,
               stop: Optional[List[str]] = None) -> str:
-        response, updated_history = model.chat(
-            tokenizer,
+        response, updated_history = self.model.chat(
+            self.tokenizer,
             prompt,
             history=self.history,
             max_length=self.max_token,
             temperature=self.temperature,
         )
         torch_gc()
+        print("history: ", self.history)
         if stop is not None:
             response = enforce_stop_tokens(response, stop)
         self.history = updated_history
         return response
+
+    def load_model(self,
+                   model_name_or_path: str = "THUDM/chatglm-6b"):
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name_or_path,
+            trust_remote_code=True
+        )
+        self.model = (
+            AutoModel.from_pretrained(
+                model_name_or_path,
+                trust_remote_code=True)
+            .half()
+            .cuda()
+        )
