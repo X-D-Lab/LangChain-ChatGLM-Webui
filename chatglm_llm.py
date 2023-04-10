@@ -1,9 +1,12 @@
+import os
 from typing import List, Optional
 
 import torch
 from langchain.llms.base import LLM
 from langchain.llms.utils import enforce_stop_tokens
 from transformers import AutoModel, AutoTokenizer
+
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 DEVICE = "cuda"
 DEVICE_ID = "0"
