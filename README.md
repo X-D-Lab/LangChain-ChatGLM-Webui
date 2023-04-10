@@ -12,4 +12,5 @@
 ## 引用
 
 1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B)
-2. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)
+2. [LangChain](https://github.com/hwchase17/langchain)
+3. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)
