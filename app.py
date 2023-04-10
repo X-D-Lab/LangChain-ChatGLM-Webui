@@ -100,7 +100,7 @@ if __name__ == "__main__":
         with gr.Row():
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatGLM-6B')
-                message = gr.Textbox()
+                message = gr.Textbox(label = '请输入问题')
 
             with gr.Column(scale=1):
                 llm = gr.Dropdown(["chatglm-6b", "chatglm-6b-int4"],
