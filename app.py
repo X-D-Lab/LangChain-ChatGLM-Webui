@@ -93,7 +93,7 @@ if __name__ == "__main__":
     with block as demo:
         gr.Markdown("""<h1><center>LangChain-ChatGLM-Webui</center></h1>
         <center><font size=3><a href='https://modelscope.cn/models/ZhipuAI/ChatGLM-6B/summary' target="_blank">ChatGLM-6B </a>是一个开源的、支持中英双语的对话语言模型，基于 General Language Model (GLM) 架构，具有 62 亿参数。
-        本项目利用LangChain和ChatGLM-6B系列模型制作Webui, 为基于本地知识的大模型应用. 目前支持上传 txt、docx、md 等文本格式文件
+        本项目利用LangChain和ChatGLM-6B系列模型制作Webui, 提供基于本地知识的大模型应用. 目前支持上传 txt、docx、md 等文本格式文件
         </center></font>
         """)
         with gr.Row():
@@ -103,10 +103,10 @@ if __name__ == "__main__":
 
             with gr.Column(scale=1):
                 llm = gr.Dropdown(["chatglm-6b", "chatglm-6b-int4"],
-                                label="ChatGLM-6B")
+                                label="ChatGLM-6B", value="chatglm-6b-int4")
                 embedding_model = gr.Dropdown(["ernie-tiny", "ernie-base", "text2vec"],
-                                            label="embedding_model")
-                file = gr.File(label = '上传知识库文件')
+                                            label="Embedding model", value = "ernie-tiny")
+                file = gr.File(label = '请上传知识库文件')
         
         state = gr.State()
         
