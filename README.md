@@ -10,9 +10,10 @@
 
 ## 使用方式
 
+**需要Python>=3.8.1**
 1. git clone本项目: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`
 2. 进入本项目目录：`cd LangChain-ChatGLM-Webui`
-3. 安装依赖包：`pip install -r requirements.txt`
+3. 安装依赖包：`pip3 install -r requirements.txt`
 4. 执行app.py：`python3 app.py`
 
 ## Todo
@@ -22,6 +23,10 @@
 * [ ] 优化模型加载机制及内存使用
 * [ ] 支持上传多个文本文件
 * [ ] 提供ModelScope版本
+
+## 已知问题
+
+1. 在A100 40GB 机器上部署，速度仍旧**非常**慢。
 
 ## 引用
 
