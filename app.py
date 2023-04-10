@@ -60,7 +60,7 @@ def get_knowledge_based_answer(query, vector_store, chat_history=[]):
 
 
 def clear_session():
-    return '', '', None
+    return '',  None
 
 
 def predict(input, file_obj, history=None):
@@ -79,7 +79,7 @@ def predict(input, file_obj, history=None):
 if __name__ == "__main__":
     block = gr.Blocks()
     with block as demo:
-        gr.Markdown("""<h1><center>LangChain-ChatGLM-weibu</center></h1>
+        gr.Markdown("""<h1><center>LangChain-ChatGLM-Webui</center></h1>
         <center><font size=3><a href='https://modelscope.cn/models/ZhipuAI/ChatGLM-6B/summary' target="_blank">ChatGLM-6B </a>是一个开源的、支持中英双语的对话语言模型，基于 General Language Model (GLM) 架构，具有 62 亿参数。</center></font>
         """)
         chatbot = gr.Chatbot(label='ChatGLM-6B')
@@ -98,7 +98,7 @@ if __name__ == "__main__":
                        outputs=[message, chatbot, state])
             clear_history.click(fn=clear_session,
                                 inputs=[],
-                                outputs=[chatbot],
+                                outputs=[chatbot, state],
                                 queue=False)
 
     demo.queue().launch(height=800, share=True)

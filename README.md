@@ -1,4 +1,4 @@
-# LangChain-ChatGLM-weibu
+# LangChain-ChatGLM-Webui
 
 ## 介绍
 
