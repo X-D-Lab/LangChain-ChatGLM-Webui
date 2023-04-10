@@ -10,10 +10,21 @@ from langchain.vectorstores import FAISS
 
 from chatglm_llm import ChatGLM
 
+embedding_model_dict = {
+    "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
+    "ernie-base": "nghuyong/ernie-3.0-base-zh",
+    "text2vec": "GanymedeNil/text2vec-large-chinese"
+}
 
-def init_knowledge_vector_store(filepath):
+llm_model_dict = {
+    "chatglm-6b": "THUDM/chatglm-6b",
+    "chatglm-6b-int4": "THUDM/chatglm-6b-int4"
+}
+
+
+def init_knowledge_vector_store(embedding_model, filepath):
     embeddings = HuggingFaceEmbeddings(
-        model_name="GanymedeNil/text2vec-large-chinese", )
+        model_name=embedding_model_dict[embedding_model], )
     loader = UnstructuredFileLoader(filepath, mode="elements")
     docs = loader.load()
 
@@ -21,7 +32,7 @@ def init_knowledge_vector_store(filepath):
     return vector_store
 
 
-def get_knowledge_based_answer(query, vector_store, chat_history=[]):
+def get_knowledge_based_answer(llm, query, vector_store, chat_history=[]):
     system_template = """基于以下内容，简洁和专业的来回答用户的问题。
     如果无法从中得到答案，请说 "不知道" 或 "没有足够的相关信息"，不要试图编造答案。答案请使用中文。
     ----------------
@@ -44,6 +55,7 @@ def get_knowledge_based_answer(query, vector_store, chat_history=[]):
     改写后的独立、完整的问题："""
     new_question_prompt = PromptTemplate.from_template(condese_propmt_template)
     chatglm = ChatGLM()
+    chatglm.load_model(model_name_or_path=llm_model_dict[llm])
     chatglm.history = chat_history
     knowledge_chain = ChatVectorDBChain.from_llm(
         llm=chatglm,
@@ -60,45 +72,57 @@ def get_knowledge_based_answer(query, vector_store, chat_history=[]):
 
 
 def clear_session():
-    return '',  None
+    return '', None
 
 
-def predict(input, file_obj, history=None):
+def predict(input, llm, embedding_model, file_obj, history=None):
     if history == None:
         history = []
     print(file_obj.name)
-    vector_store = init_knowledge_vector_store(file_obj.name)
+    vector_store = init_knowledge_vector_store(embedding_model, file_obj.name)
 
-    resp = get_knowledge_based_answer(query=input,
-                                               vector_store=vector_store)
+    resp = get_knowledge_based_answer(llm,
+                                      query=input,
+                                      vector_store=vector_store)
     history.append((input, resp['answer']))
     return '', history, history
-
 
 
 if __name__ == "__main__":
     block = gr.Blocks()
     with block as demo:
         gr.Markdown("""<h1><center>LangChain-ChatGLM-Webui</center></h1>
-        <center><font size=3><a href='https://modelscope.cn/models/ZhipuAI/ChatGLM-6B/summary' target="_blank">ChatGLM-6B </a>是一个开源的、支持中英双语的对话语言模型，基于 General Language Model (GLM) 架构，具有 62 亿参数。</center></font>
+        <center><font size=3><a href='https://modelscope.cn/models/ZhipuAI/ChatGLM-6B/summary' target="_blank">ChatGLM-6B </a>是一个开源的、支持中英双语的对话语言模型，基于 General Language Model (GLM) 架构，具有 62 亿参数。
+        本项目利用LangChain和ChatGLM-6B系列模型制作Webui, 为基于本地知识的大模型应用. 目前支持上传 txt、docx、md 等文本格式文件
+        </center></font>
         """)
-        chatbot = gr.Chatbot(label='ChatGLM-6B')
-        message = gr.Textbox()
+        with gr.Row():
+            with gr.Column(scale=4):
+                chatbot = gr.Chatbot(label='ChatGLM-6B')
+                message = gr.Textbox()
+
+            with gr.Column(scale=1):
+                llm = gr.Dropdown(["chatglm-6b", "chatglm-6b-int4"],
+                                label="ChatGLM-6B")
+                embedding_model = gr.Dropdown(["ernie-tiny", "ernie-base", "text2vec"],
+                                            label="embedding_model")
+                file = gr.File(label = '上传知识库文件')
+        
         state = gr.State()
-        file = gr.File()
+        
         message.submit(predict,
-                       inputs=[message, file, state],
-                       outputs=[message, chatbot, state])
+                    inputs=[message, llm, embedding_model, file, state],
+                    outputs=[message, chatbot, state])
         with gr.Row():
             clear_history = gr.Button("🧹 清除历史对话")
             send = gr.Button("🚀 发送")
 
             send.click(predict,
-                       inputs=[message, file, state],
+                       inputs=[message, llm, embedding_model, file, state],
                        outputs=[message, chatbot, state])
             clear_history.click(fn=clear_session,
                                 inputs=[],
                                 outputs=[chatbot, state],
                                 queue=False)
 
-    demo.queue().launch(height=800, share=True)
+    demo.queue().launch(share=True)
