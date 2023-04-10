@@ -92,8 +92,9 @@ if __name__ == "__main__":
     block = gr.Blocks()
     with block as demo:
         gr.Markdown("""<h1><center>LangChain-ChatGLM-Webui</center></h1>
-        <center><font size=3><a href='https://modelscope.cn/models/ZhipuAI/ChatGLM-6B/summary' target="_blank">ChatGLM-6B </a>是一个开源的、支持中英双语的对话语言模型，基于 General Language Model (GLM) 架构，具有 62 亿参数。
-        本项目利用LangChain和ChatGLM-6B系列模型制作Webui, 提供基于本地知识的大模型应用. 目前支持上传 txt、docx、md 等文本格式文件
+        <center><font size=3><a href='https://github.com/THUDM/ChatGLM-6B' target="_blank">ChatGLM-6B </a>是一个开源的、支持中英双语的对话语言模型，基于 General Language Model (GLM) 架构，具有 62 亿参数. <br>
+        本项目利用LangChain和ChatGLM-6B系列模型制作Webui, 提供基于本地知识的大模型应用. <br>
+        目前支持上传 txt、docx、md 等文本格式文件.
         </center></font>
         """)
         with gr.Row():
