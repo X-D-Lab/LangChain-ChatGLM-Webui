@@ -2,11 +2,11 @@
 
 ## 介绍
 
-利用LangChain和ChatGLM-6B系列模型制作的Webui, 基于本地知识的大模型应用.
+受[langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)启发, 利用LangChain和ChatGLM-6B系列模型制作的Webui, 提供基于本地知识的大模型应用.
 
-目前支持上传 txt、docx、md 等文本格式文件，提供包括[ChatGLM-6B]、[ChatGLM-6B-int4]的模型文件以及[GanymedeNil/text2vec-large-chinese](https://huggingface.co/GanymedeNil/text2vec-large-chinese)、[nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)、[nghuyong/ernie-3.0-nano-zh](https://huggingface.co/nghuyong/ernie-3.0-nano-zh)的Embedding模型.
+目前支持上传 txt、docx、md 等文本格式文件, 提供包括[ChatGLM-6B]、[ChatGLM-6B-int4]的模型文件以及[GanymedeNil/text2vec-large-chinese](https://huggingface.co/GanymedeNil/text2vec-large-chinese)、[nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)、[nghuyong/ernie-3.0-nano-zh](https://huggingface.co/nghuyong/ernie-3.0-nano-zh)的Embedding模型.
 
-效果如下：
+效果如下:
 ![](./img/demo.jpg)
 
 ## 使用方式
@@ -24,10 +24,11 @@
 * [ ] 优化模型加载机制及内存使用
 * [ ] 支持上传多个文本文件
 * [ ] 提供ModelScope版本
+* [ ] 支持用户自定义Embedding模型
 
 ## 已知问题
 
-1. 在A100 40GB 机器上部署，速度仍旧**非常**慢。
+1. 即使在`GPU: 1*A100, CPU: 8, 显存: 40GB, 内存: 50GB`机器上部署，速度仍旧**非常**慢。
 
 ## 引用
 
