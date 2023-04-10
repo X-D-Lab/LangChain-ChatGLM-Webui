@@ -2,7 +2,7 @@
 
 ## 介绍
 
-基于LangChain和ChatGLM-6B系列模型制作的Webui
+利用LangChain和ChatGLM-6B系列模型制作的Webui, 基于本地知识的大模型应用.
 
 ## Todo
 
