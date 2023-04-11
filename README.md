@@ -12,6 +12,7 @@
 ## 🚀使用方式
 
 **需要Python>=3.8.1**
+【推荐镜像】：`192.168.242.22:443/default-workspace/fccb038c23234b9e80105d4ccd152117/image:LangChain-ChatGLM`
 1. git clone本项目: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`
 2. 进入本项目目录：`cd LangChain-ChatGLM-Webui`
 3. 安装依赖包：`pip3 install -r requirements.txt`
