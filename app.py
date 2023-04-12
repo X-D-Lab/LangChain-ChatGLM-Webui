@@ -1,6 +1,11 @@
+import os
+
 import gradio as gr
+import sentence_transformers
+import torch
 from langchain.chains import ChatVectorDBChain
 from langchain.document_loaders import UnstructuredFileLoader
+from langchain.embeddings import JinaEmbeddings
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts.chat import (ChatPromptTemplate,
                                     HumanMessagePromptTemplate,
@@ -21,10 +26,15 @@ llm_model_dict = {
     "chatglm-6b-int4": "THUDM/chatglm-6b-int4"
 }
 
+DEVICE = "cuda" if torch.cuda.is_available(
+) else "mps" if torch.backends.mps.is_available() else "cpu"
+
 
 def init_knowledge_vector_store(embedding_model, filepath):
     embeddings = HuggingFaceEmbeddings(
         model_name=embedding_model_dict[embedding_model], )
+    embeddings.client = sentence_transformers.SentenceTransformer(
+        embeddings.model_name, device=DEVICE)
     loader = UnstructuredFileLoader(filepath, mode="elements")
     docs = loader.load()
 
@@ -100,20 +110,23 @@ if __name__ == "__main__":
         with gr.Row():
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatGLM-6B')
-                message = gr.Textbox(label = '请输入问题')
+                message = gr.Textbox(label='请输入问题')
 
             with gr.Column(scale=1):
                 llm = gr.Dropdown(["chatglm-6b", "chatglm-6b-int4"],
-                                label="ChatGLM-6B", value="chatglm-6b-int4")
-                embedding_model = gr.Dropdown(["ernie-tiny", "ernie-base", "text2vec"],
-                                            label="Embedding model", value = "ernie-tiny")
-                file = gr.File(label = '请上传知识库文件')
-        
+                                  label="ChatGLM-6B",
+                                  value="chatglm-6b-int4")
+                embedding_model = gr.Dropdown(
+                    ["ernie-tiny", "ernie-base", "text2vec"],
+                    label="Embedding model",
+                    value="ernie-tiny")
+                file = gr.File(label='请上传知识库文件')
+
         state = gr.State()
-        
+
         message.submit(predict,
-                    inputs=[message, llm, embedding_model, file, state],
-                    outputs=[message, chatbot, state])
+                       inputs=[message, llm, embedding_model, file, state],
+                       outputs=[message, chatbot, state])
         with gr.Row():
             clear_history = gr.Button("🧹 清除历史对话")
             send = gr.Button("🚀 发送")
