@@ -1,5 +1,8 @@
 # LangChain-ChatGLM-Webui
 
+## 🔥项目体验
+本项目提供基于ModelScope魔搭社区的[在线体验](https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary)，欢迎尝试和反馈！
+
 ## 👏项目介绍
 
 受[langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)启发, 利用LangChain和ChatGLM-6B系列模型制作的Webui, 提供基于本地知识的大模型应用.
@@ -12,7 +15,7 @@
 ## 🚀使用方式
 
 **需要Python>=3.8.1**
-【推荐镜像】：`192.168.242.22:443/default-workspace/fccb038c23234b9e80105d4ccd152117/image:LangChain-ChatGLM`
+
 1. git clone本项目: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`
 2. 进入本项目目录：`cd LangChain-ChatGLM-Webui`
 3. 安装依赖包：`pip3 install -r requirements.txt`
@@ -21,11 +24,10 @@
 ## 💪Todo
 
 * [x] 多个模型选择
-* [ ] 提供部署镜像
 * [ ] 支持上下文
 * [ ] 优化模型加载机制及内存使用
 * [ ] 支持上传多个文本文件
-* [ ] 提供ModelScope版本
+* [x] 提供ModelScope版本
 * [ ] 支持用户自定义Embedding模型
 
 ## 😖已知问题
