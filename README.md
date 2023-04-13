@@ -30,10 +30,6 @@
 * [x] 提供ModelScope版本
 * [ ] 支持用户自定义Embedding模型
 
-## 😖已知问题
-
-1. 即使在`GPU: 1*A100, CPU: 8, 显存: 40GB, 内存: 50GB`机器上部署，速度仍旧**非常**慢；
-
 ## ❤️引用
 
 1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B): ChatGLM-6B: 开源双语对话语言模型
