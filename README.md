@@ -1,7 +1,8 @@
 # LangChain-ChatGLM-Webui
 
 ## 🔥项目体验
-本项目提供基于ModelScope魔搭社区的[在线体验](https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary)，欢迎尝试和反馈！
+
+本项目提供基于ModelScope魔搭社区的[在线体验](https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary), 欢迎尝试和反馈!
 
 ## 👏项目介绍
 
