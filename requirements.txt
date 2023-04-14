@@ -1,5 +1,5 @@
 langchain
-transformers==4.27.1
+jina
 unstructured[local-inference]
 layoutparser[layoutmodels,tesseract]
 nltk
@@ -9,3 +9,4 @@ icetk
 cpm_kernels
 faiss-cpu
 gradio
+nltk

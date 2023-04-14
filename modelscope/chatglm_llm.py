@@ -4,7 +4,6 @@ from typing import List, Optional
 import torch
 from langchain.llms.base import LLM
 from langchain.llms.utils import enforce_stop_tokens
-from transformers import AutoModel, AutoTokenizer
 
 from modelscope.pipelines import pipeline
 from modelscope.utils.constant import Tasks
@@ -21,15 +20,18 @@ def torch_gc():
         with torch.cuda.device(CUDA_DEVICE):
             torch.cuda.empty_cache()
             torch.cuda.ipc_collect()
-
-
+            
 pipe = pipeline(task=Tasks.chat,
                 model='ZhipuAI/ChatGLM-6B',
-                model_revision='v1.0.7')
+                model_revision='v1.0.13')
+
 
 
 class ChatGLM(LLM):
     history = []
+    max_length = 10000
+    temperature: float = 0.01
+    top_p = 0.9    
 
     def __init__(self):
         super().__init__()
@@ -40,7 +42,7 @@ class ChatGLM(LLM):
 
     def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
 
-        inputs = {'text': prompt, 'history': self.history}
+        inputs = {'text': prompt, 'history': self.history, 'max_length': self.max_length, 'temperature': self.temperature, 'top_p': self.top_p}
         result = pipe(inputs)
         response = result['response']
         updated_history = pipe(inputs)['history']
@@ -49,3 +51,5 @@ class ChatGLM(LLM):
             response = enforce_stop_tokens(response, stop)
         self.history = updated_history
         return response
+
+ 

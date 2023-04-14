@@ -11,7 +11,8 @@
 目前支持上传 txt、docx、md 等文本格式文件, 提供包括[ChatGLM-6B]、[ChatGLM-6B-int4]的模型文件以及[GanymedeNil/text2vec-large-chinese](https://huggingface.co/GanymedeNil/text2vec-large-chinese)、[nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)、[nghuyong/ernie-3.0-nano-zh](https://huggingface.co/nghuyong/ernie-3.0-nano-zh)的Embedding模型.
 
 效果如下:
-![](./img/demo.jpg)
+![](./img/demo_new.jpg)
+![](./img/demo_ms.jpg)
 
 ## 🚀使用方式
 
