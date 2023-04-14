@@ -26,8 +26,7 @@
 ## 💪Todo
 
 * [x] 多个模型选择
-* [ ] 支持上下文
-* [ ] 优化模型加载机制及内存使用
+* [x] 支持上下文
 * [ ] 支持上传多个文本文件
 * [x] 提供ModelScope版本
 * [ ] 支持用户自定义Embedding模型
@@ -37,3 +36,9 @@
 1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B): ChatGLM-6B: 开源双语对话语言模型
 2. [LangChain](https://github.com/hwchase17/langchain): Building applications with LLMs through composability
 3. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM): 基于本地知识的 ChatGLM 应用实现
+
+## 🙇‍感谢
+
+1. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)提供的基础框架
+2. [魔搭ModelScope](https://modelscope.cn/home)提供展示空间
+3. [OpenI启智社区](https://openi.pcl.ac.cn/)提供调试算力
