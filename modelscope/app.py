@@ -14,7 +14,9 @@ from chatglm_llm import ChatGLM
 
 nltk.data.path.append('././nltk_data')
 
-DEVICE = "cpu"
+
+DEVICE = "cuda" if torch.cuda.is_available(
+) else "mps" if torch.backends.mps.is_available() else "cpu"
 
 embedding_model_dict = {
     "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
@@ -22,6 +24,16 @@ embedding_model_dict = {
     "text2vec-base": "shibing624/text2vec-base-chinese",
 }
 
+llm_dict = {
+    'ChatGLM-6B': {
+        'model_name': 'ZhipuAI/ChatGLM-6B',
+        'model_revision': 'v1.0.13',
+    },
+    'ChatGLM-6B-int4': {
+        'model_name': 'ZhipuAI/ChatGLM-6B-Int4',
+        'model_revision': 'v1.0.0',
+    }
+}
 
 def init_knowledge_vector_store(embedding_model, filepath):
 
@@ -39,6 +51,7 @@ def init_knowledge_vector_store(embedding_model, filepath):
 
 def get_knowledge_based_answer(
     query,
+    large_language_model,
     vector_store,
     VECTOR_SEARCH_TOP_K,
     chat_history=[],
@@ -58,6 +71,8 @@ def get_knowledge_based_answer(
                             input_variables=["context", "question"])
 
     chatLLM = ChatGLM()
+    chatLLM.model_name = llm_dict[large_language_model]['model_name']
+    chatLLM.model_revision = llm_dict[large_language_model]['model_revision']
 
     chatLLM.history = chat_history[-history_len:] if history_len > 0 else []
     chatLLM.temperature = temperature
@@ -80,6 +95,7 @@ def clear_session():
 
 
 def predict(input,
+            large_language_model,
             embedding_model,
             file_obj,
             VECTOR_SEARCH_TOP_K,
@@ -94,6 +110,7 @@ def predict(input,
 
     resp = get_knowledge_based_answer(
         query=input,
+        large_language_model=large_language_model,
         vector_store=vector_store,
         VECTOR_SEARCH_TOP_K=VECTOR_SEARCH_TOP_K,
         chat_history=history,
@@ -118,11 +135,17 @@ if __name__ == "__main__":
         """)
         with gr.Row():
             with gr.Column(scale=1):
+                large_language_model = gr.Dropdown([
+                    "ChatGLM-6B", "ChatGLM-6B-int4"
+                ],
+                                              label="large language model",
+                                              value="ChatGLM-6B")
                 embedding_model = gr.Dropdown([
                     "ernie-tiny", "ernie-base", "text2vec-base"
                 ],
                                               label="Embedding model",
                                               value="ernie-tiny")
+                
 
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx'])
@@ -136,8 +159,8 @@ if __name__ == "__main__":
                                                 interactive=True)
 
                 HISTORY_LEN = gr.Slider(0,
-                                        5,
-                                        value=3,
+                                        3,
+                                        value=0,
                                         step=1,
                                         label="history len",
                                         interactive=True)
@@ -167,7 +190,7 @@ if __name__ == "__main__":
 
                     send.click(predict,
                             inputs=[
-                                message, embedding_model, file, VECTOR_SEARCH_TOP_K,
+                                message, large_language_model, embedding_model, file, VECTOR_SEARCH_TOP_K,
                                 HISTORY_LEN, temperature, top_p, state
                             ],
                             outputs=[message, chatbot, state])
@@ -178,7 +201,7 @@ if __name__ == "__main__":
 
                     message.submit(predict,
                                 inputs=[
-                                    message, embedding_model, file, VECTOR_SEARCH_TOP_K,
+                                    message, large_language_model, embedding_model, file, VECTOR_SEARCH_TOP_K,
                                     HISTORY_LEN, temperature, top_p, state
                                 ],
                                 outputs=[message, chatbot, state])
@@ -187,4 +210,4 @@ if __name__ == "__main__":
         2. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
         3. 有任何使用问题，请通过[问题交流区](https://modelscope.cn/studios/thomas/ChatYuan-test/comment)或[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
-    demo.queue().launch(share=True)
+    demo.queue().launch(share=False)
