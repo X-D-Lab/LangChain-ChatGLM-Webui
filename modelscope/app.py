@@ -12,7 +12,7 @@ from langchain.vectorstores import FAISS
 
 from chatglm_llm import ChatGLM
 
-nltk.data.path.append('././nltk_data')
+nltk.data.path.append('./nltk_data')
 
 
 DEVICE = "cuda" if torch.cuda.is_available(
@@ -20,7 +20,7 @@ DEVICE = "cuda" if torch.cuda.is_available(
 
 embedding_model_dict = {
     "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
-    "ernie-base": "nghuyong/ernie-3.0-xbase-zh",
+    "ernie-base": "nghuyong/ernie-3.0-base-zh",
     "text2vec-base": "shibing624/text2vec-base-chinese",
 }
 
@@ -59,8 +59,8 @@ def get_knowledge_based_answer(
     temperature=0.01,
     top_p=0.9,
 ):
-    prompt_template = """基于以下已知信息，简洁和专业的来回答用户的问题。
-        如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"，不允许在答案中添加编造成分，答案请使用中文。
+    prompt_template = """基于以下已知信息，请简洁并专业地回答用户的问题。
+        如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"。不允许在答案中添加编造成分。另外，答案请使用中文。
 
         已知内容:
         {context}
@@ -83,6 +83,9 @@ def get_knowledge_based_answer(
         retriever=vector_store.as_retriever(
             search_kwargs={"k": VECTOR_SEARCH_TOP_K}),
         prompt=prompt)
+    knowledge_chain.combine_documents_chain.document_prompt = PromptTemplate(
+            input_variables=["page_content"], template="{page_content}"
+        )
 
     knowledge_chain.return_source_documents = True
     result = knowledge_chain({"query": query})
@@ -135,11 +138,7 @@ if __name__ == "__main__":
         """)
         with gr.Row():
             with gr.Column(scale=1):
-                large_language_model = gr.Dropdown([
-                    "ChatGLM-6B", "ChatGLM-6B-int4"
-                ],
-                                              label="large language model",
-                                              value="ChatGLM-6B")
+                
                 embedding_model = gr.Dropdown([
                     "ernie-tiny", "ernie-base", "text2vec-base"
                 ],
@@ -177,6 +176,11 @@ if __name__ == "__main__":
                                 step=0.1,
                                 label="top_p",
                                 interactive=True)
+                large_language_model = gr.Dropdown([
+                    "ChatGLM-6B", "ChatGLM-6B-int4"
+                ],
+                                              label="large language model",
+                                              value="ChatGLM-6B")
 
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatLLM').style(height=400)
@@ -206,8 +210,9 @@ if __name__ == "__main__":
                                 ],
                                 outputs=[message, chatbot, state])
         gr.Markdown("""提醒：<br>
-        1. 请勿上传或输入敏感内容，否则输出内容将被平台拦截返回error. <br>
+        1. 更改LLM模型前请先刷新页面，否则将返回error（后续将完善此部分）. <br>
         2. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
-        3. 有任何使用问题，请通过[问题交流区](https://modelscope.cn/studios/thomas/ChatYuan-test/comment)或[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
+        3. 请勿上传或输入敏感内容，否则输出内容将被平台拦截返回error.<br>
+        4. 有任何使用问题，请通过[问题交流区](https://modelscope.cn/studios/thomas/ChatYuan-test/comment)或[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
     demo.queue().launch(share=False)
