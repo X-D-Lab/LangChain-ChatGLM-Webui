@@ -31,9 +31,9 @@
 
 ### 模型下载
 若存在网络问题可点击以下链接快速下载：
-1. ChatGLM-6B
-2. ChatGLM-6B-int4
-3. ChatGLM-6B-int8
+1. [ChatGLM-6B](https://openi.pcl.ac.cn/attachments/b33c55bb-8e7c-4e9d-90e5-c310dcc776d9?type=0)
+2. [ChatGLM-6B-int4](https://openi.pcl.ac.cn/attachments/b2c7f23f-6864-40da-9c81-2c0607cb1d02?type=0)
+3. [ChatGLM-6B-int8](https://openi.pcl.ac.cn/attachments/3aad10d1-ac8e-48f8-ac5f-cea8b54cf41b?type=0)
 
 ## 💪Todo
 
