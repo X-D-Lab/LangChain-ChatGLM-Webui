@@ -29,6 +29,12 @@
 3. 安装依赖包：`pip3 install -r requirements.txt`
 4. 执行app.py：`python3 app.py`
 
+### 模型下载
+若存在网络问题可点击以下链接快速下载：
+1. ChatGLM-6B
+2. ChatGLM-6B-int4
+3. ChatGLM-6B-int8
+
 ## 💪Todo
 
 * [x] 多个模型选择
