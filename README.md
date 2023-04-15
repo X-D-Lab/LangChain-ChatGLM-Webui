@@ -15,7 +15,7 @@
 ![](./img/demo_ms.jpg)
 
 ## 🚀使用方式
-
+提供ModelScope版本和HuggingFace版本。其中ModelScope版本下载更稳定。
 **需要Python>=3.8.1**
 
 1. git clone本项目: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`
