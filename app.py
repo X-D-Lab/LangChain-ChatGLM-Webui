@@ -18,6 +18,8 @@ nltk.data.path.append('./nltk_data')
 embedding_model_dict = {
     "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
     "ernie-base": "nghuyong/ernie-3.0-base-zh",
+    "ernie-medium": "nghuyong/ernie-3.0-medium-zh",
+    "ernie-xbase": "nghuyong/ernie-3.0-xbase-zh",
     "text2vec": "GanymedeNil/text2vec-large-chinese"
 }
 
@@ -129,10 +131,12 @@ if __name__ == "__main__":
         with gr.Row():
             with gr.Column(scale=1):
 
-                embedding_model = gr.Dropdown(
-                    ["ernie-tiny", "ernie-base", "text2vec-base"],
-                    label="Embedding model",
-                    value="ernie-tiny")
+                embedding_model = gr.Dropdown([
+                    "ernie-tiny", "ernie-medium", "ernie-base", "ernie-xbase",
+                    "text2vec-base"
+                ],
+                                              label="Embedding model",
+                                              value="ernie-base")
 
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx'])
