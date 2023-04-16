@@ -29,6 +29,10 @@ llm_dict = {
         'model_name': 'ZhipuAI/ChatGLM-6B',
         'model_revision': 'v1.0.13',
     },
+    'ChatGLM-6B-int8': {
+        'model_name': 'thomas/ChatGLM-6B-Int8',
+        'model_revision': 'v1.0.1',
+    },
     'ChatGLM-6B-int4': {
         'model_name': 'ZhipuAI/ChatGLM-6B-Int4',
         'model_revision': 'v1.0.0',
@@ -177,7 +181,7 @@ if __name__ == "__main__":
                                 label="top_p",
                                 interactive=True)
                 large_language_model = gr.Dropdown([
-                    "ChatGLM-6B", "ChatGLM-6B-int4"
+                    "ChatGLM-6B", "ChatGLM-6B-int4", 'ChatGLM-6B-int8'
                 ],
                                               label="large language model",
                                               value="ChatGLM-6B")
