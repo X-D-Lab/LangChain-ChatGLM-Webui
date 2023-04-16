@@ -13,6 +13,8 @@ from langchain.vectorstores import FAISS
 
 from chatglm_llm import ChatGLM
 
+nltk.data.path.append('./nltk_data')
+
 embedding_model_dict = {
     "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
     "ernie-base": "nghuyong/ernie-3.0-base-zh",
