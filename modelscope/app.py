@@ -12,7 +12,7 @@ from langchain.vectorstores import FAISS
 
 from chatglm_llm import ChatGLM
 
-nltk.data.path.append('./nltk_data')
+nltk.data.path.append('../nltk_data')
 
 
 DEVICE = "cuda" if torch.cuda.is_available(
