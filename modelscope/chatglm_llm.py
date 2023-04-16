@@ -4,6 +4,7 @@ from typing import List, Optional
 import torch
 from langchain.llms.base import LLM
 from langchain.llms.utils import enforce_stop_tokens
+
 from modelscope.pipelines import pipeline
 from modelscope.utils.constant import Tasks
 

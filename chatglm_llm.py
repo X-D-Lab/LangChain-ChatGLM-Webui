@@ -41,7 +41,7 @@ class ChatGLM(LLM):
     def _call(self,
               prompt: str,
               stop: Optional[List[str]] = None) -> str:
-        response, updated_history = self.model.chat(
+        response, _ = self.model.chat(
             self.tokenizer,
             prompt,
             history=self.history,
@@ -51,7 +51,7 @@ class ChatGLM(LLM):
         torch_gc()
         if stop is not None:
             response = enforce_stop_tokens(response, stop)
-        self.history = updated_history
+        self.history = self.history+[[None, response]]
         return response
 
     def load_model(self,

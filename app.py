@@ -114,7 +114,7 @@ def predict(input,
         top_p=top_p,
     )
     print(resp)
-    history.append((input, resp))
+    history.append((input, resp['result']))
     return '', history, history
 
 
