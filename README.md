@@ -24,11 +24,14 @@
 
 提供ModelScope版本和HuggingFace版本.  
 **需要Python>=3.8.1**  
-docker镜像：`dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
+docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
+
 1. git clone本项目: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`
 2. 进入本项目目录：`cd LangChain-ChatGLM-Webui`
 3. 安装依赖包：`pip3 install -r requirements.txt`
 4. 执行app.py：`python3 app.py`
+
+详细部署文档可参考:[部署文档](./docs/deploy.md)
 
 ### 模型下载
 
@@ -47,6 +50,7 @@ docker镜像：`dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 * [x] 支持上下文
 * [ ] 支持上传多个文本文件
 * [x] 提供ModelScope版本
+* [x] 提供环境镜像和部署文档
 * [ ] 支持用户自定义Embedding模型
 * [ ] 代码重构
 

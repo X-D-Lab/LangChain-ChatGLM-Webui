@@ -2,6 +2,8 @@
 
 ## 环境准备
 
+【推荐Docker镜像】: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
+
 项目需要Python>=3.8.1
 
 1. git clone本项目, 您可以在自己的terminal中执行: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`. 若国内用户访问Github存在网络问题, 也可以执行: `https://openi.pcl.ac.cn/Learning-Develop-Union/LangChain-ChatGLM-Webui.git`
@@ -75,3 +77,4 @@ llm_model_dict = {
 ### 常见的细节问题
 
 1. 需要等文件完全上传之后再进行对话 
+2. 若detectron2安装有问题, 可以执行:`pip install 'git+https://openi.pcl.ac.cn/Learning-Develop-Union/detectron2.git'`
