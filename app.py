@@ -139,7 +139,7 @@ if __name__ == "__main__":
                                               value="ernie-base")
 
                 file = gr.File(label='请上传知识库文件',
-                               file_types=['.txt', '.md', '.docx'])
+                               file_types=['.txt', '.md', '.docx', '.pdf'])
 
                 VECTOR_SEARCH_TOP_K = gr.Slider(1,
                                                 20,
