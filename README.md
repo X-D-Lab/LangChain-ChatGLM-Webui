@@ -26,6 +26,7 @@
 **需要Python>=3.8.1**  
 docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 
+### 使用步骤
 1. git clone本项目: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`
 2. 进入本项目目录：`cd LangChain-ChatGLM-Webui`
 3. 安装依赖包：`pip3 install -r requirements.txt`
