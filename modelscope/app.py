@@ -27,15 +27,15 @@ embedding_model_dict = {
 llm_dict = {
     'ChatGLM-6B': {
         'model_name': 'ZhipuAI/ChatGLM-6B',
-        'model_revision': 'v1.0.13',
+        'model_revision': 'v1.0.14',
     },
     'ChatGLM-6B-int8': {
         'model_name': 'thomas/ChatGLM-6B-Int8',
-        'model_revision': 'v1.0.1',
+        'model_revision': 'v1.0.2',
     },
     'ChatGLM-6B-int4': {
         'model_name': 'ZhipuAI/ChatGLM-6B-Int4',
-        'model_revision': 'v1.0.0',
+        'model_revision': 'v1.0.1',
     }
 }
 
@@ -184,7 +184,7 @@ if __name__ == "__main__":
                     "ChatGLM-6B", "ChatGLM-6B-int4", 'ChatGLM-6B-int8'
                 ],
                                               label="large language model",
-                                              value="ChatGLM-6B")
+                                              value="ChatGLM-6B-int8")
 
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatLLM').style(height=400)

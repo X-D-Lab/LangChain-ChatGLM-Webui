@@ -56,6 +56,8 @@ docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 * [ ] 支持用户自定义Embedding模型
 * [ ] 代码重构
 
+项目处于初期阶段, 有很多可以做的地方和优化的空间, 欢迎感兴趣的社区大佬们一起加入!
+
 ## ❤️引用
 
 1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B): ChatGLM-6B: 开源双语对话语言模型
