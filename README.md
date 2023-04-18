@@ -33,7 +33,7 @@ docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 3. 安装依赖包：`pip3 install -r requirements.txt`
 4. 执行app.py：`python3 app.py`
 
-详细部署文档可参考: [部署文档](./docs/deploy.md)
+详细部署教程可参考: [部署文档](./docs/deploy.md) | [视频教程](https://www.bilibili.com/video/BV1No4y1b7eu/)
 
 ### 支持模型
 
