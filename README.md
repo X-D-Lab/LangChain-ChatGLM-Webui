@@ -37,8 +37,8 @@ docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 
 ### Docker部署
 
-1.docker build -t langchain-chatglm-webui . 
-2.docker run -it --rm --runtime=nvidia --gpus all --network host -v /home/nodecloud/ptuning/chatglm-6b:/data/chatglm-6b langchain-chatglm-webui
+1. `docker build -t langchain-chatglm-webui . `
+2. `docker run -it --rm --runtime=nvidia --gpus all --network host -v /home/nodecloud/ptuning/chatglm-6b:/data/chatglm-6b langchain-chatglm-webui`
 
 自适应多GPU场景，增加多GPU并行处理能力。
 
