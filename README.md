@@ -41,7 +41,7 @@ docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 2. 运行镜像：`docker run -it --rm --runtime=nvidia --gpus all --network host -v /home/nodecloud/ptuning/chatglm-6b:/data/chatglm-6b langchain-chatglm-webui`
 3. 访问服务：`http://ip:7861`
 
-自适应多GPU场景，增加多GPU并行处理能力。
+自适应多GPU场景, 增加多GPU并行处理能力.
 
 ### 支持模型
 
@@ -77,4 +77,4 @@ docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 1. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)提供的基础框架
 2. [魔搭ModelScope](https://modelscope.cn/home)提供展示空间
 3. [OpenI启智社区](https://openi.pcl.ac.cn/)提供调试算力
-4. [@online2311](https://github.com/online2311)帮忙进行[多卡测试](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/4)
+4. [@online2311](https://github.com/online2311)进行[多卡测试](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/4)、[增加外部访问支持、增加ChatGLM-6b-local 本地模型读取路径、修复text2vec 无法加载的错误、增加 Dockerfile、增加Docker 使用说明](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pull/6)
