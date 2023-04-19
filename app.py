@@ -174,7 +174,7 @@ if __name__ == "__main__":
                         "ChatGLM-6b-int4-qe", "ChatGLM-6b-local"
                     ],
                     label="large language model",
-                    value="ChatGLM-6b-local")
+                    value="ChatGLM-6B-int4")
 
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatLLM').style(height=400)
