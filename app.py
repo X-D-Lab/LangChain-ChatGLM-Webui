@@ -175,10 +175,16 @@ if __name__ == "__main__":
         """)
         with gr.Row():
             with gr.Column(scale=1):
+                model_choose = gr.Accordion("模型选择")
+                with model_choose:
+                    large_language_model = gr.Dropdown(
+                        list(llm_model_dict.keys()),
+                        label="large language model",
+                        value="ChatGLM-6B-int8")
 
-                embedding_model = gr.Dropdown(list(embedding_model_dict.keys()),
-                                              label="Embedding model",
-                                              value="text2vec-base")
+                    embedding_model = gr.Dropdown(list(embedding_model_dict.keys()),
+                                                label="Embedding model",
+                                                value="text2vec-base")
 
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx', '.pdf'])
@@ -186,37 +192,37 @@ if __name__ == "__main__":
                 use_web = gr.Radio(["True", "False"], label="Web Search",
                                value="False"
                                )
+                model_argument = gr.Accordion("模型参数配置")
 
-                VECTOR_SEARCH_TOP_K = gr.Slider(1,
-                                                20,
-                                                value=6,
-                                                step=1,
-                                                label="vector search top k",
-                                                interactive=True)
+                with model_argument:
 
-                HISTORY_LEN = gr.Slider(0,
-                                        3,
-                                        value=0,
-                                        step=1,
-                                        label="history len",
-                                        interactive=True)
+                    VECTOR_SEARCH_TOP_K = gr.Slider(1,
+                                                    20,
+                                                    value=6,
+                                                    step=1,
+                                                    label="vector search top k",
+                                                    interactive=True)
 
-                temperature = gr.Slider(0,
-                                        1,
-                                        value=0.01,
-                                        step=0.01,
-                                        label="temperature",
-                                        interactive=True)
-                top_p = gr.Slider(0,
-                                  1,
-                                  value=0.9,
-                                  step=0.1,
-                                  label="top_p",
-                                  interactive=True)
-                large_language_model = gr.Dropdown(
-                    list(llm_model_dict.keys()),
-                    label="large language model",
-                    value="ChatGLM-6B-int8")
+                    HISTORY_LEN = gr.Slider(0,
+                                            3,
+                                            value=0,
+                                            step=1,
+                                            label="history len",
+                                            interactive=True)
+
+                    temperature = gr.Slider(0,
+                                            1,
+                                            value=0.01,
+                                            step=0.01,
+                                            label="temperature",
+                                            interactive=True)
+                    top_p = gr.Slider(0,
+                                    1,
+                                    value=0.9,
+                                    step=0.1,
+                                    label="top_p",
+                                    interactive=True)
+                
 
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatLLM').style(height=400)
