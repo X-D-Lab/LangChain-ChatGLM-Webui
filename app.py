@@ -14,6 +14,7 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.vectorstores import FAISS
 
 from chatglm_llm import ChatGLM
+from chinese_text_splitter import ChineseTextSplitter
 
 nltk.data.path.append('./nltk_data')
 
@@ -33,6 +34,7 @@ llm_model_dict = {
     "ChatGLM-6b-local": "/data/chatglm-6b"
 }
 
+
 DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
 
@@ -49,13 +51,26 @@ def search_web(query):
                 web_content += result['body']
         return web_content
 
+def load_file(filepath):
+    if filepath.lower().endswith(".pdf"):
+        loader = UnstructuredFileLoader(filepath)
+        textsplitter = ChineseTextSplitter(pdf=True)
+        docs = loader.load_and_split(textsplitter)
+    else:
+        loader = UnstructuredFileLoader(filepath, mode="elements")
+        textsplitter = ChineseTextSplitter(pdf=False)
+        docs = loader.load_and_split(text_splitter=textsplitter)
+    return docs
+
+
+
 def init_knowledge_vector_store(embedding_model, filepath):
     embeddings = HuggingFaceEmbeddings(
         model_name=embedding_model_dict[embedding_model], )
     embeddings.client = sentence_transformers.SentenceTransformer(
         embeddings.model_name, device=DEVICE)
-    loader = UnstructuredFileLoader(filepath, mode="elements")
-    docs = loader.load()
+
+    docs = load_file(filepath)
 
     vector_store = FAISS.from_documents(docs, embeddings)
     return vector_store
@@ -161,10 +176,7 @@ if __name__ == "__main__":
         with gr.Row():
             with gr.Column(scale=1):
 
-                embedding_model = gr.Dropdown([
-                    "ernie-tiny", "ernie-medium", "ernie-base", "ernie-xbase",
-                    "text2vec-base"
-                ],
+                embedding_model = gr.Dropdown(list(embedding_model_dict.keys()),
                                               label="Embedding model",
                                               value="text2vec-base")
 
@@ -202,10 +214,7 @@ if __name__ == "__main__":
                                   label="top_p",
                                   interactive=True)
                 large_language_model = gr.Dropdown(
-                    [
-                        "ChatGLM-6B", "ChatGLM-6B-int4", "ChatGLM-6B-int8",
-                        "ChatGLM-6b-int4-qe", "ChatGLM-6b-local"
-                    ],
+                    list(llm_model_dict.keys()),
                     label="large language model",
                     value="ChatGLM-6B-int8")
 
