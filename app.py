@@ -159,7 +159,7 @@ if __name__ == "__main__":
                 temperature = gr.Slider(0,
                                         1,
                                         value=0.01,
-                                        step=0.011,
+                                        step=0.01,
                                         label="temperature",
                                         interactive=True)
                 top_p = gr.Slider(0,
