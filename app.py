@@ -20,14 +20,15 @@ embedding_model_dict = {
     "ernie-base": "nghuyong/ernie-3.0-base-zh",
     "ernie-medium": "nghuyong/ernie-3.0-medium-zh",
     "ernie-xbase": "nghuyong/ernie-3.0-xbase-zh",
-    "text2vec": "GanymedeNil/text2vec-large-chinese"
+    "text2vec-base": "GanymedeNil/text2vec-large-chinese"
 }
 
 llm_model_dict = {
     "ChatGLM-6B": "THUDM/chatglm-6b",
     "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
     "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
-    "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe"
+    "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
+    "ChatGLM-6b-local": "/data/chatglm-6b"
 }
 
 DEVICE = "cuda" if torch.cuda.is_available(
@@ -136,7 +137,7 @@ if __name__ == "__main__":
                     "text2vec-base"
                 ],
                                               label="Embedding model",
-                                              value="ernie-base")
+                                              value="text2vec-base")
 
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx', '.pdf'])
@@ -170,10 +171,10 @@ if __name__ == "__main__":
                 large_language_model = gr.Dropdown(
                     [
                         "ChatGLM-6B", "ChatGLM-6B-int4", "ChatGLM-6B-int8",
-                        "ChatGLM-6b-int4-qe"
+                        "ChatGLM-6b-int4-qe", "ChatGLM-6b-local"
                     ],
                     label="large language model",
-                    value="ChatGLM-6B-int8")
+                    value="ChatGLM-6b-local")
 
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatLLM').style(height=400)
@@ -210,4 +211,4 @@ if __name__ == "__main__":
         3. 请勿上传或输入敏感内容，否则输出内容将被平台拦截返回error.<br>
         4. 有任何使用问题，请通过[问题交流区](https://modelscope.cn/studios/thomas/ChatYuan-test/comment)或[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
-    demo.queue().launch(share=False)
+    demo.queue().launch(server_name='0.0.0.0', share=False)
