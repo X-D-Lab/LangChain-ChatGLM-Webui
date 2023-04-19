@@ -69,3 +69,4 @@ docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 1. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)提供的基础框架
 2. [魔搭ModelScope](https://modelscope.cn/home)提供展示空间
 3. [OpenI启智社区](https://openi.pcl.ac.cn/)提供调试算力
+4. [@online2311](https://github.com/online2311)帮忙[测试多卡](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/4)
