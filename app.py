@@ -4,6 +4,8 @@ import gradio as gr
 import nltk
 import sentence_transformers
 import torch
+from duckduckgo_search import ddg
+from duckduckgo_search.utils import SESSION
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import UnstructuredFileLoader
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
@@ -34,6 +36,18 @@ llm_model_dict = {
 DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
 
+def search_web(query):
+
+        SESSION.proxies = {
+            "http": f"socks5h://localhost:7890",
+            "https": f"socks5h://localhost:7890"
+        }
+        results = ddg(query)
+        web_content = ''
+        if results:
+            for result in results:
+                web_content += result['body']
+        return web_content
 
 def init_knowledge_vector_store(embedding_model, filepath):
     embeddings = HuggingFaceEmbeddings(
@@ -51,18 +65,28 @@ def get_knowledge_based_answer(query,
                                large_language_model,
                                vector_store,
                                VECTOR_SEARCH_TOP_K,
+                               web_content,
                                history_len,
                                temperature,
                                top_p,
                                chat_history=[]):
-    prompt_template = """基于以下已知信息，简洁和专业的来回答用户的问题。
-                    如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"，不允许在答案中添加编造成分，答案请使用中文。
+    if web_content:
+        prompt_template = f"""基于以下已知信息，简洁和专业的来回答用户的问题。
+                            如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"，不允许在答案中添加编造成分，答案请使用中文。
+                            已知网络检索内容：{web_content}""" + """
+                            已知内容:
+                            {context}
+                            问题:
+                            {question}"""
+    else:
+        prompt_template = """基于以下已知信息，请简洁并专业地回答用户的问题。
+            如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"。不允许在答案中添加编造成分。另外，答案请使用中文。
 
-                    已知内容:
-                    {context}
+            已知内容:
+            {context}
 
-                    问题:
-                    {question}"""
+            问题:
+            {question}"""
     prompt = PromptTemplate(template=prompt_template,
                             input_variables=["context", "question"])
     chatLLM = ChatGLM()
@@ -98,17 +122,22 @@ def predict(input,
             history_len,
             temperature,
             top_p,
+            use_web,
             history=None):
     if history == None:
         history = []
     print(file_obj.name)
     vector_store = init_knowledge_vector_store(embedding_model, file_obj.name)
-
+    if use_web == 'True':
+        web_content = search_web(query=input)
+    else:
+        web_content = ''
     resp = get_knowledge_based_answer(
         query=input,
         large_language_model=large_language_model,
         vector_store=vector_store,
         VECTOR_SEARCH_TOP_K=VECTOR_SEARCH_TOP_K,
+        web_content=web_content,
         chat_history=history,
         history_len=history_len,
         temperature=temperature,
@@ -141,6 +170,10 @@ if __name__ == "__main__":
 
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx', '.pdf'])
+                
+                use_web = gr.Radio(["True", "False"], label="Web Search",
+                               value="False"
+                               )
 
                 VECTOR_SEARCH_TOP_K = gr.Slider(1,
                                                 20,
@@ -189,7 +222,7 @@ if __name__ == "__main__":
                                inputs=[
                                    message, large_language_model,
                                    embedding_model, file, VECTOR_SEARCH_TOP_K,
-                                   HISTORY_LEN, temperature, top_p, state
+                                   HISTORY_LEN, temperature, top_p, use_web,state
                                ],
                                outputs=[message, chatbot, state])
                     clear_history.click(fn=clear_session,
@@ -202,7 +235,7 @@ if __name__ == "__main__":
                                        message, large_language_model,
                                        embedding_model, file,
                                        VECTOR_SEARCH_TOP_K, HISTORY_LEN,
-                                       temperature, top_p, state
+                                       temperature, top_p, use_web,state
                                    ],
                                    outputs=[message, chatbot, state])
         gr.Markdown("""提醒：<br>

@@ -4,48 +4,55 @@ import gradio as gr
 import nltk
 import sentence_transformers
 import torch
+from duckduckgo_search import ddg
+from duckduckgo_search.utils import SESSION
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import UnstructuredFileLoader
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
+from langchain.prompts.prompt import PromptTemplate
 from langchain.vectorstores import FAISS
 
 from chatglm_llm import ChatGLM
 
-nltk.data.path.append('../nltk_data')
-
-
-DEVICE = "cuda" if torch.cuda.is_available(
-) else "mps" if torch.backends.mps.is_available() else "cpu"
+nltk.data.path.append('./nltk_data')
 
 embedding_model_dict = {
     "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
     "ernie-base": "nghuyong/ernie-3.0-base-zh",
-    "text2vec-base": "shibing624/text2vec-base-chinese",
+    "ernie-medium": "nghuyong/ernie-3.0-medium-zh",
+    "ernie-xbase": "nghuyong/ernie-3.0-xbase-zh",
+    "text2vec-base": "GanymedeNil/text2vec-base-chinese"
 }
 
-llm_dict = {
-    'ChatGLM-6B': {
-        'model_name': 'ZhipuAI/ChatGLM-6B',
-        'model_revision': 'v1.0.14',
-    },
-    'ChatGLM-6B-int8': {
-        'model_name': 'thomas/ChatGLM-6B-Int8',
-        'model_revision': 'v1.0.2',
-    },
-    'ChatGLM-6B-int4': {
-        'model_name': 'ZhipuAI/ChatGLM-6B-Int4',
-        'model_revision': 'v1.0.1',
-    }
+llm_model_dict = {
+    "ChatGLM-6B": "THUDM/chatglm-6b",
+    "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
+    "ChatGLM-6B-int8": "/dataset/chatglm-6b-int8",
+    "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
+    "ChatGLM-6b-local": "/data/chatglm-6b"
 }
+
+DEVICE = "cuda" if torch.cuda.is_available(
+) else "mps" if torch.backends.mps.is_available() else "cpu"
+def search_web(query):
+
+        SESSION.proxies = {
+            "http": f"socks5h://localhost:7890",
+            "https": f"socks5h://localhost:7890"
+        }
+        results = ddg(query)
+        web_content = ''
+        if results:
+            for result in results:
+                web_content += result['body']
+        return web_content
 
 def init_knowledge_vector_store(embedding_model, filepath):
-
     embeddings = HuggingFaceEmbeddings(
         model_name=embedding_model_dict[embedding_model], )
     embeddings.client = sentence_transformers.SentenceTransformer(
         embeddings.model_name, device=DEVICE)
-
     loader = UnstructuredFileLoader(filepath, mode="elements")
     docs = loader.load()
 
@@ -53,32 +60,38 @@ def init_knowledge_vector_store(embedding_model, filepath):
     return vector_store
 
 
-def get_knowledge_based_answer(
-    query,
-    large_language_model,
-    vector_store,
-    VECTOR_SEARCH_TOP_K,
-    chat_history=[],
-    history_len=3,
-    temperature=0.01,
-    top_p=0.9,
-):
-    prompt_template = """基于以下已知信息，请简洁并专业地回答用户的问题。
-        如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"。不允许在答案中添加编造成分。另外，答案请使用中文。
+def get_knowledge_based_answer(query,
+                               large_language_model,
+                               vector_store,
+                               VECTOR_SEARCH_TOP_K,
+                               web_content,
+                               history_len,
+                               temperature,
+                               top_p,
+                               chat_history=[]):
+    if web_content:
+        prompt_template = f"""基于以下已知信息，简洁和专业的来回答用户的问题。
+                            如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"，不允许在答案中添加编造成分，答案请使用中文。
+                            已知网络检索内容：{web_content}""" + """
+                            已知内容:
+                            {context}
+                            问题:
+                            {question}"""
+    else:
+        prompt_template = """基于以下已知信息，请简洁并专业地回答用户的问题。
+            如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"。不允许在答案中添加编造成分。另外，答案请使用中文。
 
-        已知内容:
-        {context}
+            已知内容:
+            {context}
 
-        问题:
-        {question}"""
+            问题:
+            {question}"""
     prompt = PromptTemplate(template=prompt_template,
                             input_variables=["context", "question"])
-
     chatLLM = ChatGLM()
-    chatLLM.model_name = llm_dict[large_language_model]['model_name']
-    chatLLM.model_revision = llm_dict[large_language_model]['model_revision']
-
+    chatLLM.load_model(model_name_or_path=llm_model_dict[large_language_model])
     chatLLM.history = chat_history[-history_len:] if history_len > 0 else []
+
     chatLLM.temperature = temperature
     chatLLM.top_p = top_p
 
@@ -88,13 +101,12 @@ def get_knowledge_based_answer(
             search_kwargs={"k": VECTOR_SEARCH_TOP_K}),
         prompt=prompt)
     knowledge_chain.combine_documents_chain.document_prompt = PromptTemplate(
-            input_variables=["page_content"], template="{page_content}"
-        )
+        input_variables=["page_content"], template="{page_content}")
 
     knowledge_chain.return_source_documents = True
-    result = knowledge_chain({"query": query})
 
-    return result['result']
+    result = knowledge_chain({"query": query})
+    return result
 
 
 def clear_session():
@@ -109,24 +121,29 @@ def predict(input,
             history_len,
             temperature,
             top_p,
+            use_web,
             history=None):
     if history == None:
         history = []
     print(file_obj.name)
     vector_store = init_knowledge_vector_store(embedding_model, file_obj.name)
-
+    if use_web == 'True':
+        web_content = search_web(query=input)
+    else:
+        web_content = ''
     resp = get_knowledge_based_answer(
         query=input,
         large_language_model=large_language_model,
         vector_store=vector_store,
         VECTOR_SEARCH_TOP_K=VECTOR_SEARCH_TOP_K,
+        web_content=web_content,
         chat_history=history,
         history_len=history_len,
         temperature=temperature,
-        top_p= top_p,
+        top_p=top_p,
     )
     print(resp)
-    history.append((input, resp))
+    history.append((input, resp['result']))
     return '', history, history
 
 
@@ -142,17 +159,20 @@ if __name__ == "__main__":
         """)
         with gr.Row():
             with gr.Column(scale=1):
-                
+
                 embedding_model = gr.Dropdown([
-                    "ernie-tiny", "ernie-base", "text2vec-base"
+                    "ernie-tiny", "ernie-medium", "ernie-base", "ernie-xbase",
+                    "text2vec-base"
                 ],
                                               label="Embedding model",
-                                              value="ernie-tiny")
-                
+                                              value="text2vec-base")
 
                 file = gr.File(label='请上传知识库文件',
-                               file_types=['.txt', '.md', '.docx'])
-
+                               file_types=['.txt', '.md', '.docx', '.pdf'])
+                use_web = gr.Radio(["True", "False"], label="web search",
+                               info="是否使用网络搜索，使用时确保网络畅通",
+                               value="False"
+                               )
 
                 VECTOR_SEARCH_TOP_K = gr.Slider(1,
                                                 20,
@@ -175,48 +195,52 @@ if __name__ == "__main__":
                                         label="temperature",
                                         interactive=True)
                 top_p = gr.Slider(0,
-                                1,
-                                value=0.9,
-                                step=0.1,
-                                label="top_p",
-                                interactive=True)
-                large_language_model = gr.Dropdown([
-                    "ChatGLM-6B", "ChatGLM-6B-int4", 'ChatGLM-6B-int8'
-                ],
-                                              label="large language model",
-                                              value="ChatGLM-6B-int8")
+                                  1,
+                                  value=0.9,
+                                  step=0.1,
+                                  label="top_p",
+                                  interactive=True)
+                large_language_model = gr.Dropdown(
+                    [
+                        "ChatGLM-6B", "ChatGLM-6B-int4", "ChatGLM-6B-int8",
+                        "ChatGLM-6b-int4-qe", "ChatGLM-6b-local"
+                    ],
+                    label="large language model",
+                    value="ChatGLM-6B-int8")
 
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatLLM').style(height=400)
                 message = gr.Textbox(label='请输入问题')
                 state = gr.State()
 
-                
                 with gr.Row():
                     clear_history = gr.Button("🧹 清除历史对话")
                     send = gr.Button("🚀 发送")
 
                     send.click(predict,
-                            inputs=[
-                                message, large_language_model, embedding_model, file, VECTOR_SEARCH_TOP_K,
-                                HISTORY_LEN, temperature, top_p, state
-                            ],
-                            outputs=[message, chatbot, state])
+                               inputs=[
+                                   message, large_language_model,
+                                   embedding_model, file, VECTOR_SEARCH_TOP_K,
+                                   HISTORY_LEN, temperature, top_p, use_web,state
+                               ],
+                               outputs=[message, chatbot, state])
                     clear_history.click(fn=clear_session,
                                         inputs=[],
                                         outputs=[chatbot, state],
                                         queue=False)
 
                     message.submit(predict,
-                                inputs=[
-                                    message, large_language_model, embedding_model, file, VECTOR_SEARCH_TOP_K,
-                                    HISTORY_LEN, temperature, top_p, state
-                                ],
-                                outputs=[message, chatbot, state])
+                                   inputs=[
+                                       message, large_language_model,
+                                       embedding_model, file,
+                                       VECTOR_SEARCH_TOP_K, HISTORY_LEN,
+                                       temperature, top_p, use_web,state
+                                   ],
+                                   outputs=[message, chatbot, state])
         gr.Markdown("""提醒：<br>
         1. 更改LLM模型前请先刷新页面，否则将返回error（后续将完善此部分）. <br>
         2. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
         3. 请勿上传或输入敏感内容，否则输出内容将被平台拦截返回error.<br>
         4. 有任何使用问题，请通过[问题交流区](https://modelscope.cn/studios/thomas/ChatYuan-test/comment)或[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
-    demo.queue().launch(share=False)
+    demo.queue().launch(share=True)
