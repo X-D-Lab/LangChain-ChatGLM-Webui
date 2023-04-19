@@ -2,12 +2,12 @@
 
 ## Apr 19 2023
 
-1. 提供视频教程
-2. 提供Docker部署及教程
+1. 提供视频部署教程
+2. 提供Docker部署及文字教程
 3. 支持多卡推理ChatGLM-6B
 4. 增加外部访问支持
 5. 增加ChatGLM-6b-local以及本地模型读取路径
-6. 修复text2vec无法加载的错误。、
+6. 修复text2vec无法加载的错误
 
 上述2-6来自社区[@online2311](https://github.com/online2311)
 
