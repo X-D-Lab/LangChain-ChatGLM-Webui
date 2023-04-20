@@ -1,4 +1,5 @@
 langchain
+accelerate
 duckduckgo_search
 git+https://github.com/huggingface/transformers
 tokenizers>=0.13.3
