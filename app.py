@@ -34,7 +34,6 @@ llm_model_dict = {
     "ChatGLM-6b-local": "/data/chatglm-6b"
 }
 
-
 DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
 

@@ -3,6 +3,7 @@
 ## Apr 21 2023
 
 1. ModelScope版本支持Web Search
+2. 在[HuggingFace](https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM)和[ModelScope](https://www.modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary)的APP上支持了由Jina.ai提供的`ViT-B-32::laion2b-s34b-b79k` Embedding Inference
 
 ## Apr 20 2023
 
