@@ -8,7 +8,8 @@
 
 ## 🔥项目体验
 
-本项目提供基于ModelScope魔搭社区的[在线体验](https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary), 欢迎尝试和反馈!
+本项目提供基于ModelScope魔搭社区的[在线体验](https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary), 欢迎尝试和反馈!  
+(已知一些不稳定因素, 正在尽快解决!)  
 
 ## 👏项目介绍
 
