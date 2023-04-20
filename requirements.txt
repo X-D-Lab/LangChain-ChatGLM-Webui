@@ -1,6 +1,7 @@
 langchain
 duckduckgo_search
-transformers==4.27.1
+git+https://github.com/huggingface/transformers
+tokenizers>=0.13.3
 unstructured[local-inference]
 layoutparser[layoutmodels,tesseract]
 nltk
