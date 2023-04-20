@@ -24,7 +24,6 @@
 
 提供ModelScope版本和HuggingFace版本.  
 **需要Python>=3.8.1**  
-docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 
 ### 使用步骤
 

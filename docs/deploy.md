@@ -2,8 +2,6 @@
 
 ## 环境准备
 
-【推荐Docker镜像】: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
-
 项目需要Python>=3.8.1
 
 1. git clone本项目, 您可以在自己的terminal中执行: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`. 若国内用户访问Github存在网络问题, 也可以执行: `https://openi.pcl.ac.cn/Learning-Develop-Union/LangChain-ChatGLM-Webui.git`
@@ -11,6 +9,8 @@
 3. 安装依赖包：`pip install -r requirements.txt`, 国内用户可设置清华源加速下载.
 
 另: 若您想要安装测试ModelScope版本, 需要额外安装ModelScope包: `pip install modelscope==1.4.3 -f https://modelscope.oss-cn-beijing.aliyuncs.com/releases/repo.html `
+
+[OpenI启智社区](https://openi.pcl.ac.cn/Learning-Develop-Union/LangChain-ChatGLM-Webui)部署推荐的Docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
 
 ## 启动程序
 
