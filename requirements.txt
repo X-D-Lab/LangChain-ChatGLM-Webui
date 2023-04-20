@@ -1,4 +1,5 @@
 langchain
+duckduckgo_search
 transformers==4.27.1
 unstructured[local-inference]
 layoutparser[layoutmodels,tesseract]
