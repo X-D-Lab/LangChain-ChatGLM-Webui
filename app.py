@@ -197,7 +197,7 @@ if __name__ == "__main__":
                 with model_argument:
 
                     VECTOR_SEARCH_TOP_K = gr.Slider(1,
-                                                    20,
+                                                    10,
                                                     value=6,
                                                     step=1,
                                                     label="vector search top k",

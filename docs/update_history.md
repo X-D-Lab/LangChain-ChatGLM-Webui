@@ -1,11 +1,16 @@
 # 更新日志
 
+## Apr 21 2023
+
+1. ModelScope版本支持Web Search
+
 ## Apr 20 2023
 
 1. 优化对`.pdf`的支持
 2. 优化UI设计
 3. 修改对于Docker镜像的描述
 4. 提供HuggingFace的在线体验
+5. 完善Readme描述
 
 ## Apr 19 2023
 
