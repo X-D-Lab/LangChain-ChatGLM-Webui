@@ -14,7 +14,8 @@ class ChineseTextSplitter(CharacterTextSplitter):
             text = re.sub(r"\n{3,}", "\n", text)
             text = re.sub('\s', ' ', text)
             text = text.replace("\n\n", "")
-        sent_sep_pattern = re.compile('([﹒﹔﹖﹗．。！？]["’”」』]{0,2}|(?=["‘“「『]{1,2}|$))')  # del ：；
+        sent_sep_pattern = re.compile(
+            '([﹒﹔﹖﹗．。！？]["’”」』]{0,2}|(?=["‘“「『]{1,2}|$))')  # del ：；
         sent_list = []
         for ele in sent_sep_pattern.split(text):
             if sent_sep_pattern.match(ele) and sent_list:

@@ -37,18 +37,20 @@ llm_model_dict = {
 DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
 
+
 def search_web(query):
 
-        SESSION.proxies = {
-            "http": f"socks5h://localhost:7890",
-            "https": f"socks5h://localhost:7890"
-        }
-        results = ddg(query)
-        web_content = ''
-        if results:
-            for result in results:
-                web_content += result['body']
-        return web_content
+    SESSION.proxies = {
+        "http": f"socks5h://localhost:7890",
+        "https": f"socks5h://localhost:7890"
+    }
+    results = ddg(query)
+    web_content = ''
+    if results:
+        for result in results:
+            web_content += result['body']
+    return web_content
+
 
 def load_file(filepath):
     if filepath.lower().endswith(".pdf"):
@@ -60,7 +62,6 @@ def load_file(filepath):
         textsplitter = ChineseTextSplitter(pdf=False)
         docs = loader.load_and_split(text_splitter=textsplitter)
     return docs
-
 
 
 def init_knowledge_vector_store(embedding_model, filepath):
@@ -181,26 +182,28 @@ if __name__ == "__main__":
                         label="large language model",
                         value="ChatGLM-6B-int8")
 
-                    embedding_model = gr.Dropdown(list(embedding_model_dict.keys()),
-                                                label="Embedding model",
-                                                value="text2vec-base")
+                    embedding_model = gr.Dropdown(list(
+                        embedding_model_dict.keys()),
+                                                  label="Embedding model",
+                                                  value="text2vec-base")
 
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx', '.pdf'])
-                
-                use_web = gr.Radio(["True", "False"], label="Web Search",
-                               value="False"
-                               )
+
+                use_web = gr.Radio(["True", "False"],
+                                   label="Web Search",
+                                   value="False")
                 model_argument = gr.Accordion("模型参数配置")
 
                 with model_argument:
 
-                    VECTOR_SEARCH_TOP_K = gr.Slider(1,
-                                                    10,
-                                                    value=6,
-                                                    step=1,
-                                                    label="vector search top k",
-                                                    interactive=True)
+                    VECTOR_SEARCH_TOP_K = gr.Slider(
+                        1,
+                        10,
+                        value=6,
+                        step=1,
+                        label="vector search top k",
+                        interactive=True)
 
                     HISTORY_LEN = gr.Slider(0,
                                             3,
@@ -216,12 +219,11 @@ if __name__ == "__main__":
                                             label="temperature",
                                             interactive=True)
                     top_p = gr.Slider(0,
-                                    1,
-                                    value=0.9,
-                                    step=0.1,
-                                    label="top_p",
-                                    interactive=True)
-                
+                                      1,
+                                      value=0.9,
+                                      step=0.1,
+                                      label="top_p",
+                                      interactive=True)
 
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot(label='ChatLLM').style(height=400)
@@ -236,7 +238,8 @@ if __name__ == "__main__":
                                inputs=[
                                    message, large_language_model,
                                    embedding_model, file, VECTOR_SEARCH_TOP_K,
-                                   HISTORY_LEN, temperature, top_p, use_web,state
+                                   HISTORY_LEN, temperature, top_p, use_web,
+                                   state
                                ],
                                outputs=[message, chatbot, state])
                     clear_history.click(fn=clear_session,
@@ -249,7 +252,7 @@ if __name__ == "__main__":
                                        message, large_language_model,
                                        embedding_model, file,
                                        VECTOR_SEARCH_TOP_K, HISTORY_LEN,
-                                       temperature, top_p, use_web,state
+                                       temperature, top_p, use_web, state
                                    ],
                                    outputs=[message, chatbot, state])
         gr.Markdown("""提醒：<br>

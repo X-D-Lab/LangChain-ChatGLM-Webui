@@ -20,16 +20,15 @@ def torch_gc():
         with torch.cuda.device(CUDA_DEVICE):
             torch.cuda.empty_cache()
             torch.cuda.ipc_collect()
-            
+
 
 class ChatGLM(LLM):
     history = []
     max_length = 10000
     temperature: float = 0.01
-    top_p = 0.9   
+    top_p = 0.9
     model_name = 'ZhipuAI/ChatGLM-6B'
     model_revision = 'v1.0.13'
-    
 
     def __init__(self):
         super().__init__()
@@ -40,7 +39,13 @@ class ChatGLM(LLM):
 
     def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
 
-        inputs = {'text': prompt, 'history': self.history, 'max_length': self.max_length, 'temperature': self.temperature, 'top_p': self.top_p}
+        inputs = {
+            'text': prompt,
+            'history': self.history,
+            'max_length': self.max_length,
+            'temperature': self.temperature,
+            'top_p': self.top_p
+        }
         pipe = self.pipe()
         result = pipe(inputs)
         response = result['response']
@@ -53,5 +58,6 @@ class ChatGLM(LLM):
 
     def pipe(self):
         pipe = pipeline(task=Tasks.chat,
-                model=self.model_name, model_revision=self.model_revision)
+                        model=self.model_name,
+                        model_revision=self.model_revision)
         return pipe
