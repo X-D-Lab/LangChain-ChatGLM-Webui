@@ -15,7 +15,7 @@
 <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pulls"><img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/thomas-yanxin/LangChain-ChatGLM-Webui?color=0088ff" /></a>
 </p>
 <p align="center">  
-   <a href="https://www.bilibili.com/video/BV1No4y1b7eu/"><strong>视频教程</strong></a> | <a href="https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM"><strong>在线体验</strong></a> 
+   <a href="https://www.bilibili.com/video/BV1No4y1b7eu/"><strong>视频教程</strong></a> | <a href="https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM"><strong>在线体验</strong></a> | <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/blob/master/docs/update_history.md"><strong>更新日志</strong></a> 
 
 </p>
 
