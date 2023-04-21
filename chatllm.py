@@ -22,6 +22,7 @@ def torch_gc():
             torch.cuda.empty_cache()
             torch.cuda.ipc_collect()
 
+
 def auto_configure_device_map(num_gpus: int) -> Dict[str, int]:
     # transformer.word_embeddings 占用1层
     # transformer.final_layernorm 和 lm_head 占用1层
@@ -36,8 +37,11 @@ def auto_configure_device_map(num_gpus: int) -> Dict[str, int]:
     # 在调用chat或者stream_chat时,input_ids会被放到model.device上
     # 如果transformer.word_embeddings.device和model.device不同,则会导致RuntimeError
     # 因此这里将transformer.word_embeddings,transformer.final_layernorm,lm_head都放到第一张卡上
-    device_map = {'transformer.word_embeddings': 0,
-                  'transformer.final_layernorm': 0, 'lm_head': 0}
+    device_map = {
+        'transformer.word_embeddings': 0,
+        'transformer.final_layernorm': 0,
+        'lm_head': 0
+    }
 
     used = 2
     gpu_target = 0
@@ -52,8 +56,7 @@ def auto_configure_device_map(num_gpus: int) -> Dict[str, int]:
     return device_map
 
 
-
-class ChatGLM(LLM):
+class ChatLLM(LLM):
     max_token: int = 10000
     temperature: float = 0.1
     top_p = 0.9
@@ -66,11 +69,10 @@ class ChatGLM(LLM):
 
     @property
     def _llm_type(self) -> str:
-        return "ChatGLM"
+        return "ChatLLM"
 
-    def _call(self,
-              prompt: str,
-              stop: Optional[List[str]] = None) -> str:
+    def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
+
         response, _ = self.model.chat(
             self.tokenizer,
             prompt,
@@ -81,7 +83,7 @@ class ChatGLM(LLM):
         torch_gc()
         if stop is not None:
             response = enforce_stop_tokens(response, stop)
-        self.history = self.history+[[None, response]]
+        self.history = self.history + [[None, response]]
         return response
 
     def load_model(self,
@@ -89,37 +91,28 @@ class ChatGLM(LLM):
                    llm_device=DEVICE,
                    device_map: Optional[Dict[str, int]] = None,
                    **kwargs):
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name_or_path,
-            trust_remote_code=True
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path,
+                                                       trust_remote_code=True)
         if torch.cuda.is_available() and llm_device.lower().startswith("cuda"):
             # 根据当前设备GPU数量决定是否进行多卡部署
             num_gpus = torch.cuda.device_count()
             if num_gpus < 2 and device_map is None:
-                self.model = (
-                    AutoModel.from_pretrained(
-                        model_name_or_path, 
-                        trust_remote_code=True, 
-                        **kwargs)
-                    .half()
-                    .cuda()
-                )
+                self.model = (AutoModel.from_pretrained(
+                    model_name_or_path, trust_remote_code=True,
+                    **kwargs).half().cuda())
             else:
                 from accelerate import dispatch_model
 
-                model = AutoModel.from_pretrained(model_name_or_path, trust_remote_code=True, **kwargs).half()
+                model = AutoModel.from_pretrained(model_name_or_path,
+                                                  trust_remote_code=True,
+                                                  **kwargs).half()
                 # 可传入device_map自定义每张卡的部署情况
                 if device_map is None:
                     device_map = auto_configure_device_map(num_gpus)
 
                 self.model = dispatch_model(model, device_map=device_map)
         else:
-            self.model = (
-                AutoModel.from_pretrained(
-                    model_name_or_path,
-                    trust_remote_code=True)
-                .float()
-                .to(llm_device)
-            )
+            self.model = (AutoModel.from_pretrained(
+                model_name_or_path,
+                trust_remote_code=True).float().to(llm_device))
         self.model = self.model.eval()

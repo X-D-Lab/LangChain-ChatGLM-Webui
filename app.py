@@ -13,7 +13,7 @@ from langchain.prompts import PromptTemplate
 from langchain.prompts.prompt import PromptTemplate
 from langchain.vectorstores import FAISS
 
-from chatglm_llm import ChatGLM
+from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
 
 nltk.data.path.append('./nltk_data')
@@ -31,6 +31,7 @@ llm_model_dict = {
     "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
     "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
     "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
+    "ChatYuan-large-v2": "ClueAI/ChatYuan-large-v2",
     "ChatGLM-6b-local": "/data/chatglm-6b"
 }
 
@@ -104,7 +105,7 @@ def get_knowledge_based_answer(query,
             {question}"""
     prompt = PromptTemplate(template=prompt_template,
                             input_variables=["context", "question"])
-    chatLLM = ChatGLM()
+    chatLLM = ChatLLM()
     chatLLM.load_model(model_name_or_path=llm_model_dict[large_language_model])
     chatLLM.history = chat_history[-history_len:] if history_len > 0 else []
 
