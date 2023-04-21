@@ -1,4 +1,5 @@
 langchain
+fschat
 accelerate
 duckduckgo_search
 git+https://github.com/huggingface/transformers

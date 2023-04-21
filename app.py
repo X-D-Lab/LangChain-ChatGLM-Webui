@@ -31,13 +31,18 @@ llm_model_dict = {
     "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
     "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
     "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
-    "ChatYuan-large-v2": "ClueAI/ChatYuan-large-v2",
+    "vicuna-7b-1.1": "/code/vicuna-7b-1.1",
     "ChatGLM-6b-local": "/data/chatglm-6b"
 }
 
 
-DEVICE = "cuda" if torch.cuda.is_available(
+EMBEDDING_DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
+
+LLM_DEVICE = "cuda" if torch.cuda.is_available(
+) else "mps" if torch.backends.mps.is_available() else "cpu"
+
+num_gpus = torch.cuda.device_count()
 
 def search_web(query):
 
@@ -69,7 +74,7 @@ def init_knowledge_vector_store(embedding_model, filepath):
     embeddings = HuggingFaceEmbeddings(
         model_name=embedding_model_dict[embedding_model], )
     embeddings.client = sentence_transformers.SentenceTransformer(
-        embeddings.model_name, device=DEVICE)
+        embeddings.model_name, device=EMBEDDING_DEVICE)
 
     docs = load_file(filepath)
 
@@ -106,11 +111,11 @@ def get_knowledge_based_answer(query,
     prompt = PromptTemplate(template=prompt_template,
                             input_variables=["context", "question"])
     chatLLM = ChatLLM()
-    chatLLM.load_model(model_name_or_path=llm_model_dict[large_language_model])
+    chatLLM.model_name_or_path = llm_model_dict[large_language_model]
     chatLLM.history = chat_history[-history_len:] if history_len > 0 else []
-
     chatLLM.temperature = temperature
     chatLLM.top_p = top_p
+    chatLLM.load_llm(device=LLM_DEVICE, num_gpus=num_gpus)
 
     knowledge_chain = RetrievalQA.from_llm(
         llm=chatLLM,
