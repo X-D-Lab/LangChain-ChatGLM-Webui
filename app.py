@@ -32,7 +32,6 @@ llm_model_dict = {
     "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
     "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
     "vicuna-7b-1.1": "/data/vicuna-7b-1.1/",
-    "ChatGLM-6b-local": "/data/chatglm-6b"
 }
 
 EMBEDDING_DEVICE = "cuda" if torch.cuda.is_available(
@@ -65,22 +64,15 @@ class KnowledgeBasedChatLLM:
     def init_model_config(self,
                     large_language_model: str='ChatGLM-6B-int8',
                     embedding_model: str='text2vec-base',
-                    top_k: int=6,
-                    history_len: int=3,
-                    temperature: float=0.01,
-                    top_p: float=0.1):
+                    ):
         
         self.llm = ChatLLM()
         self.llm.model_name_or_path = llm_model_dict[large_language_model]
-        
-        self.llm.temperature = temperature
-        self.llm.top_p = top_p
-        self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
         self.embeddings = HuggingFaceEmbeddings(model_name=embedding_model_dict[embedding_model], )
         self.embeddings.client = sentence_transformers.SentenceTransformer(self.embeddings.model_name,
                                                                            device=EMBEDDING_DEVICE)
-        self.history_len = history_len
-        self.top_k = top_k
+        self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
+
 
 
     def init_knowledge_vector_store(self, filepath):
@@ -94,8 +86,15 @@ class KnowledgeBasedChatLLM:
     def get_knowledge_based_answer(self,query,
                                 vector_store,
                                 web_content,
-                                history=[]
-):
+                                top_k: int=6,
+                                history_len: int=3,
+                                temperature: float=0.01,
+                                top_p: float=0.1,
+                                history=[]):
+        self.llm.temperature = temperature
+        self.llm.top_p = top_p
+        self.history_len = history_len
+        self.top_k = top_k
         if web_content:
             prompt_template = f"""基于以下已知信息，简洁和专业的来回答用户的问题。
                                 如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"，不允许在答案中添加编造成分，答案请使用中文。
@@ -163,26 +162,25 @@ def clear_session():
     return '', None
 
 
-def reinit_model(large_language_model, embedding_model,
-                                        history_len, temperature, top_p,
-                                        top_k, history):
+def reinit_model(large_language_model, embedding_model,history):
     try:
         knowladge_based_chat_llm.init_model_config(large_language_model=large_language_model,
-                                                embedding_model=embedding_model,
-                                                top_k=top_k,
-                                                history_len=history_len,
-                                                temperature=temperature,
-                                                top_p=top_p)
-        model_status = """模型已成功重新加载，可以开始对话，或从右侧选择模式后开始对话"""
+                                                embedding_model=embedding_model)
+        model_status = """模型已成功重新加载，可以开始对话"""
     except Exception as e:
         print(e)
-        model_status = """模型未成功重新加载，请到页面左上角"模型配置"选项卡中重新选择后点击"加载模型"按钮"""
+        model_status = """模型未成功重新加载，请点击重新加载模型"""
     return history + [[None, model_status]]
+
 
 
 def predict(input,
             file_obj,
             use_web,
+            top_k,
+            history_len,
+            temperature,
+            top_p,
             history=None):
     if history == None:
         history = []
@@ -196,6 +194,10 @@ def predict(input,
     resp = knowladge_based_chat_llm.get_knowledge_based_answer(query=input,
                                                             vector_store=vector_store,
                                                             web_content=web_content,
+                                                            top_k=top_k,
+                                                            history_len=history_len,
+                                                            temperature=temperature,
+                                                            top_p=top_p,
                                                             history=history)
     print(resp)
     history.append((input, resp['result']))
@@ -228,8 +230,8 @@ if __name__ == "__main__":
                         embedding_model_dict.keys()),
                                                 label="Embedding model",
                                                 value="text2vec-base")
+                    load_model_button = gr.Button("重新加载模型")
                 model_argument = gr.Accordion("模型参数配置")
-
                 with model_argument:
 
                     top_k = gr.Slider(
@@ -259,7 +261,7 @@ if __name__ == "__main__":
                                     step=0.1,
                                     label="top_p",
                                     interactive=True)
-                load_model_button = gr.Button("重新加载模型")
+                
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx', '.pdf'])
 
@@ -281,13 +283,13 @@ if __name__ == "__main__":
                                     show_progress=True,
                                     inputs=[
                                         large_language_model, embedding_model,
-                                        history_len, temperature, top_p,
-                                        top_k, chatbot
+                                        chatbot
                                     ],
                                     outputs=chatbot,)
 
             send.click(predict,
-                       inputs=[message, file, use_web, state],
+                       inputs=[message, file, use_web, top_k,history_len, temperature, top_p,
+                                         state],
                        outputs=[message, chatbot, state])
             clear_history.click(fn=clear_session,
                                 inputs=[],
@@ -295,11 +297,12 @@ if __name__ == "__main__":
                                 queue=False)
 
             message.submit(predict,
-                           inputs=[message, file, use_web, state],
+                       inputs=[message, file, use_web, top_k,history_len, temperature, top_p,
+                                         state],
                            outputs=[message, chatbot, state])
         gr.Markdown("""提醒：<br>
         1. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
         2. 请勿上传或输入敏感内容，否则输出内容将被平台拦截返回error.<br>
         3. 有任何使用问题，请通过[问题交流区](https://modelscope.cn/studios/thomas/ChatYuan-test/comment)或[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
-    demo.queue().launch(share=True)
+    demo.queue().launch(server_name='0.0.0.0', share=False)
