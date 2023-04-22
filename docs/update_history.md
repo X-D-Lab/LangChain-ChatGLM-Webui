@@ -1,9 +1,18 @@
 # 更新日志
 
+## Apr 22 2023
+
+1. 优化模型加载机制
+2. 修复对不同系列模型推理的bug
+3. 修改参数不参与重新加载模型
+4. 优化UI设计
+5. 完善Readme描述
+
 ## Apr 21 2023
 
-1. ModelScope版本支持Web Search
-2. 在[HuggingFace](https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM)和[ModelScope](https://www.modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary)的APP上支持了由Jina.ai提供的`ViT-B-32::laion2b-s34b-b79k` Embedding Inference
+1. 提供对`Vicuna`模型的支持
+2. ModelScope版本支持Web Search
+3. 在[HuggingFace](https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM)和[ModelScope](https://www.modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary)的APP上支持了由Jina.ai提供的`ViT-B-32::laion2b-s34b-b79k` Embedding Inference
 
 ## Apr 20 2023
 

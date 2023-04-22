@@ -12,7 +12,7 @@ from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import FAISS
 
-from chatglm_llm import ChatGLM
+from chatllm import ChatGLM
 
 nltk.data.path.append('../nltk_data')
 
