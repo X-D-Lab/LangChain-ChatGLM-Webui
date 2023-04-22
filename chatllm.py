@@ -76,7 +76,7 @@ class ChatLLM(LLM):
 
     def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
 
-        if 'vicuna' in self.model_name_or_path:
+        if 'Vicuna' in self.model_name_or_path:
             conv = get_default_conv_template(self.model_name_or_path).copy()
             conv.append_message(conv.roles[0], prompt)
             conv.append_message(conv.roles[1], None)
@@ -92,7 +92,15 @@ class ChatLLM(LLM):
             skip_echo_len = compute_skip_echo_len(self.model_name_or_path, conv, prompt)
             response = outputs[skip_echo_len:]
             self.history =  [[None, response]]
-            
+
+        elif 'BELLE' in self.model_name_or_path:
+            prompt = "Human: "+ prompt +" \n\nAssistant: "
+            input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.to(DEVICE)
+            generate_ids =  self.model.generate(input_ids, max_new_tokens=self.max_token, do_sample = True, top_k = 30, top_p = self.top_p, temperature = self.temperature, repetition_penalty=1., eos_token_id=2, bos_token_id=1, pad_token_id=0)
+            output = self.tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
+            response = output[len(prompt)+1:]
+            self.history =  [[None, response]]
+
         else:     
             response, _ = self.model.chat(
                 self.tokenizer,
@@ -114,14 +122,7 @@ class ChatLLM(LLM):
                    num_gpus='auto',
                    device_map: Optional[Dict[str, int]] = None,
                    **kwargs):
-        if 'vicuna' in self.model_name_or_path:
-
-            self.model, self.tokenizer = load_fastchat_model(
-                model_path = self.model_name_or_path,
-                device = llm_device,
-                num_gpus = num_gpus
-            )  
-        else:        
+        if 'chatglm' in self.model_name_or_path:
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_name_or_path,
                                                        trust_remote_code=True)                            
             if torch.cuda.is_available() and llm_device.lower().startswith("cuda"):
@@ -147,3 +148,11 @@ class ChatLLM(LLM):
                     self.model_name_or_path,
                     trust_remote_code=True).float().to(llm_device))
             self.model = self.model.eval()
+
+        else:     
+            self.model, self.tokenizer = load_fastchat_model(
+                model_path = self.model_name_or_path,
+                device = llm_device,
+                num_gpus = num_gpus
+            ) 
+            
