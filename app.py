@@ -31,7 +31,7 @@ llm_model_dict = {
     "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
     "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
     "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
-    "vicuna-7b-1.1": "/data/vicuna-7b-1.1/",
+    #"vicuna-7b-1.1": "/data/vicuna-7b-1.1/", # 需要用户自行提供本地路径
 }
 
 EMBEDDING_DEVICE = "cuda" if torch.cuda.is_available(
@@ -72,7 +72,6 @@ class KnowledgeBasedChatLLM:
         self.embeddings.client = sentence_transformers.SentenceTransformer(self.embeddings.model_name,
                                                                            device=EMBEDDING_DEVICE)
         self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
-
 
 
     def init_knowledge_vector_store(self, filepath):
@@ -152,10 +151,10 @@ def init_model():
     try:
         knowladge_based_chat_llm.init_model_config()
         knowladge_based_chat_llm.llm._call("你好")
-        return """模型已成功加载，可以开始对话，或从右侧选择模式后开始对话"""
+        return """初始模型已成功加载，可以开始对话"""
     except Exception as e:
-        print(e)
-        return """模型未成功加载，请到页面左上角"模型配置"选项卡中重新选择后点击"加载模型"按钮"""
+
+        return """模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
 
 
 def clear_session():
@@ -168,10 +167,9 @@ def reinit_model(large_language_model, embedding_model,history):
                                                 embedding_model=embedding_model)
         model_status = """模型已成功重新加载，可以开始对话"""
     except Exception as e:
-        print(e)
+
         model_status = """模型未成功重新加载，请点击重新加载模型"""
     return history + [[None, model_status]]
-
 
 
 def predict(input,
@@ -199,7 +197,6 @@ def predict(input,
                                                             temperature=temperature,
                                                             top_p=top_p,
                                                             history=history)
-    print(resp)
     history.append((input, resp['result']))
     return '', history, history
 
@@ -212,7 +209,7 @@ if __name__ == "__main__":
         gr.Markdown("""<h1><center>LangChain-ChatLLM-Webui</center></h1>
         <center><font size=3>
         本项目基于LangChain和大型语言模型系列模型, 提供基于本地知识的自动问答应用. <br>
-        目前项目提供基于<a href='https://github.com/THUDM/ChatGLM-6B' target="_blank">ChatGLM-6B </a>的LLM和包括GanymedeNil/text2vec-large-chinese、nghuyong/ernie-3.0-base-zh、nghuyong/ernie-3.0-nano-zh在内的多个Embedding模型, 支持上传 txt、docx、md 等文本格式文件. <br>
+        目前项目提供基于<a href='https://github.com/THUDM/ChatGLM-6B' target="_blank">ChatGLM-6B </a>的LLM和包括GanymedeNil/text2vec-large-chinese、nghuyong/ernie-3.0-base-zh、nghuyong/ernie-3.0-nano-zh在内的多个Embedding模型, 支持上传 txt、docx、md、pdf等文本格式文件. <br>
         后续将提供更加多样化的LLM、Embedding和参数选项供用户尝试, 欢迎关注<a href='https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui' target="_blank">Github地址</a>.
         </center></font>
         """)
