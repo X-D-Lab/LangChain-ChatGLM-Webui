@@ -76,7 +76,7 @@ class ChatLLM(LLM):
 
     def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
 
-        if 'Vicuna' in self.model_name_or_path.lower():
+        if 'vicuna' in self.model_name_or_path.lower():
             conv = get_default_conv_template(self.model_name_or_path).copy()
             conv.append_message(conv.roles[0], prompt)
             conv.append_message(conv.roles[1], None)
@@ -93,7 +93,7 @@ class ChatLLM(LLM):
             response = outputs[skip_echo_len:]
             self.history =  [[None, response]]
 
-        elif 'BELLE' in self.model_name_or_path.lower():
+        elif 'belle' in self.model_name_or_path.lower():
             prompt = "Human: "+ prompt +" \n\nAssistant: "
             input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.to(DEVICE)
             generate_ids =  self.model.generate(input_ids, max_new_tokens=self.max_token, do_sample = True, top_k = 30, top_p = self.top_p, temperature = self.temperature, repetition_penalty=1., eos_token_id=2, bos_token_id=1, pad_token_id=0)

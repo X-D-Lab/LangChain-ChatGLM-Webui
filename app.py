@@ -56,23 +56,25 @@ def search_web(query):
             web_content += result['body']
     return web_content
 
+
 class KnowledgeBasedChatLLM:
 
     llm: object = None
     embeddings: object = None
 
-    def init_model_config(self,
-                    large_language_model: str='ChatGLM-6B-int8',
-                    embedding_model: str='text2vec-base',
-                    ):
-        
+    def init_model_config(
+        self,
+        large_language_model: str = 'ChatGLM-6B-int8',
+        embedding_model: str = 'text2vec-base',
+    ):
+
         self.llm = ChatLLM()
         self.llm.model_name_or_path = llm_model_dict[large_language_model]
-        self.embeddings = HuggingFaceEmbeddings(model_name=embedding_model_dict[embedding_model], )
-        self.embeddings.client = sentence_transformers.SentenceTransformer(self.embeddings.model_name,
-                                                                           device=EMBEDDING_DEVICE)
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name=embedding_model_dict[embedding_model], )
+        self.embeddings.client = sentence_transformers.SentenceTransformer(
+            self.embeddings.model_name, device=EMBEDDING_DEVICE)
         self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
-
 
     def init_knowledge_vector_store(self, filepath):
 
@@ -81,15 +83,15 @@ class KnowledgeBasedChatLLM:
         vector_store = FAISS.from_documents(docs, self.embeddings)
         return vector_store
 
-
-    def get_knowledge_based_answer(self,query,
-                                vector_store,
-                                web_content,
-                                top_k: int=6,
-                                history_len: int=3,
-                                temperature: float=0.01,
-                                top_p: float=0.1,
-                                history=[]):
+    def get_knowledge_based_answer(self,
+                                   query,
+                                   vector_store,
+                                   web_content,
+                                   top_k: int = 6,
+                                   history_len: int = 3,
+                                   temperature: float = 0.01,
+                                   top_p: float = 0.1,
+                                   history=[]):
         self.llm.temperature = temperature
         self.llm.top_p = top_p
         self.history_len = history_len
@@ -113,7 +115,8 @@ class KnowledgeBasedChatLLM:
                 {question}"""
         prompt = PromptTemplate(template=prompt_template,
                                 input_variables=["context", "question"])
-        self.llm.history  = history[-self.history_len:] if self.history_len > 0 else []
+        self.llm.history = history[
+            -self.history_len:] if self.history_len > 0 else []
 
         knowledge_chain = RetrievalQA.from_llm(
             llm=self.llm,
@@ -127,7 +130,7 @@ class KnowledgeBasedChatLLM:
 
         result = knowledge_chain({"query": query})
         return result
-    
+
     def load_file(self, filepath):
         if filepath.lower().endswith(".pdf"):
             loader = UnstructuredFileLoader(filepath)
@@ -139,13 +142,16 @@ class KnowledgeBasedChatLLM:
             docs = loader.load_and_split(text_splitter=textsplitter)
         return docs
 
+
 def update_status(history, status):
     history = history + [[None, status]]
     print(status)
     return history
 
+
 KnowledgeBasedChatLLM
 knowladge_based_chat_llm = KnowledgeBasedChatLLM()
+
 
 def init_model():
     try:
@@ -161,10 +167,11 @@ def clear_session():
     return '', None
 
 
-def reinit_model(large_language_model, embedding_model,history):
+def reinit_model(large_language_model, embedding_model, history):
     try:
-        knowladge_based_chat_llm.init_model_config(large_language_model=large_language_model,
-                                                embedding_model=embedding_model)
+        knowladge_based_chat_llm.init_model_config(
+            large_language_model=large_language_model,
+            embedding_model=embedding_model)
         model_status = """模型已成功重新加载，可以开始对话"""
     except Exception as e:
 
@@ -183,22 +190,25 @@ def predict(input,
     if history == None:
         history = []
     print(file_obj.name)
-    vector_store = knowladge_based_chat_llm.init_knowledge_vector_store(file_obj.name)
+    vector_store = knowladge_based_chat_llm.init_knowledge_vector_store(
+        file_obj.name)
     if use_web == 'True':
         web_content = search_web(query=input)
     else:
         web_content = ''
 
-    resp = knowladge_based_chat_llm.get_knowledge_based_answer(query=input,
-                                                            vector_store=vector_store,
-                                                            web_content=web_content,
-                                                            top_k=top_k,
-                                                            history_len=history_len,
-                                                            temperature=temperature,
-                                                            top_p=top_p,
-                                                            history=history)
+    resp = knowladge_based_chat_llm.get_knowledge_based_answer(
+        query=input,
+        vector_store=vector_store,
+        web_content=web_content,
+        top_k=top_k,
+        history_len=history_len,
+        temperature=temperature,
+        top_p=top_p,
+        history=history)
     history.append((input, resp['result']))
     return '', history, history
+
 
 model_status = init_model()
 
@@ -225,19 +235,18 @@ if __name__ == "__main__":
 
                     embedding_model = gr.Dropdown(list(
                         embedding_model_dict.keys()),
-                                                label="Embedding model",
-                                                value="text2vec-base")
+                                                  label="Embedding model",
+                                                  value="text2vec-base")
                     load_model_button = gr.Button("重新加载模型")
                 model_argument = gr.Accordion("模型参数配置")
                 with model_argument:
 
-                    top_k = gr.Slider(
-                        1,
-                        10,
-                        value=6,
-                        step=1,
-                        label="vector search top k",
-                        interactive=True)
+                    top_k = gr.Slider(1,
+                                      10,
+                                      value=6,
+                                      step=1,
+                                      label="vector search top k",
+                                      interactive=True)
 
                     history_len = gr.Slider(0,
                                             5,
@@ -253,12 +262,12 @@ if __name__ == "__main__":
                                             label="temperature",
                                             interactive=True)
                     top_p = gr.Slider(0,
-                                    1,
-                                    value=0.9,
-                                    step=0.1,
-                                    label="top_p",
-                                    interactive=True)
-                
+                                      1,
+                                      value=0.9,
+                                      step=0.1,
+                                      label="top_p",
+                                      interactive=True)
+
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx', '.pdf'])
 
@@ -267,7 +276,8 @@ if __name__ == "__main__":
                                    value="False")
 
             with gr.Column(scale=4):
-                chatbot = gr.Chatbot([[None, model_status.value]], label='ChatLLM').style(height=750)
+                chatbot = gr.Chatbot([[None, model_status.value]],
+                                     label='ChatLLM').style(height=750)
                 message = gr.Textbox(label='请输入问题')
                 state = gr.State()
 
@@ -275,18 +285,18 @@ if __name__ == "__main__":
                     clear_history = gr.Button("🧹 清除历史对话")
                     send = gr.Button("🚀 发送")
 
-
-            load_model_button.click(reinit_model,
-                                    show_progress=True,
-                                    inputs=[
-                                        large_language_model, embedding_model,
-                                        chatbot
-                                    ],
-                                    outputs=chatbot,)
+            load_model_button.click(
+                reinit_model,
+                show_progress=True,
+                inputs=[large_language_model, embedding_model, chatbot],
+                outputs=chatbot,
+            )
 
             send.click(predict,
-                       inputs=[message, file, use_web, top_k,history_len, temperature, top_p,
-                                         state],
+                       inputs=[
+                           message, file, use_web, top_k, history_len,
+                           temperature, top_p, state
+                       ],
                        outputs=[message, chatbot, state])
             clear_history.click(fn=clear_session,
                                 inputs=[],
@@ -294,8 +304,10 @@ if __name__ == "__main__":
                                 queue=False)
 
             message.submit(predict,
-                       inputs=[message, file, use_web, top_k,history_len, temperature, top_p,
-                                         state],
+                           inputs=[
+                               message, file, use_web, top_k, history_len,
+                               temperature, top_p, state
+                           ],
                            outputs=[message, chatbot, state])
         gr.Markdown("""提醒：<br>
         1. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
