@@ -30,7 +30,7 @@
 目前支持上传 txt、docx、md、pdf等文本格式文件, 提供包括**ChatGLM-6B系列**、**Vicuna系列**、**BELLE-LLaMA系列**的模型文件以及[GanymedeNil/text2vec-large-chinese](https://huggingface.co/GanymedeNil/text2vec-large-chinese)、[nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)、[nghuyong/ernie-3.0-nano-zh](https://huggingface.co/nghuyong/ernie-3.0-nano-zh)等Embedding模型.
 
 <details>
-  <summary> 效果如下 </summary>:
+  <summary> 效果如下 :</summary>
 ![](./img/demo_hf.jpg)
 ![](./img/demo_ms.jpg)
 </details>
