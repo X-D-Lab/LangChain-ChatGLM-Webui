@@ -93,4 +93,4 @@
 
 ## 加群沟通
 
-![](./img/wechat_group.jpg)
+<div> <img src="./img/wechat_group.jpg" width = 80%/> </div>
