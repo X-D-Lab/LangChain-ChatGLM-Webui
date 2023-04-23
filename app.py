@@ -23,7 +23,8 @@ embedding_model_dict = {
     "ernie-base": "nghuyong/ernie-3.0-base-zh",
     "ernie-medium": "nghuyong/ernie-3.0-medium-zh",
     "ernie-xbase": "nghuyong/ernie-3.0-xbase-zh",
-    "text2vec-base": "GanymedeNil/text2vec-base-chinese"
+    "text2vec-base": "GanymedeNil/text2vec-base-chinese",
+    "simbert-base-chinese": "WangZeJun/simbert-base-chinese"
 }
 
 llm_model_dict = {
