@@ -90,3 +90,7 @@
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=thomas-yanxin/LangChain-ChatGLM-Webui&type=Date)](https://star-history.com/#thomas-yanxin/LangChain-ChatGLM-Webui&Date)
+
+## 加群沟通
+
+![](./img/wechat_group.jpg)
