@@ -93,4 +93,4 @@
 
 ## 加群沟通
 
-<div> <img src="./img/wechat_group.jpg" width = 80%/> </div>
+<div> <img src="./img/wechat_group.jpg" width = 50%/> </div>
