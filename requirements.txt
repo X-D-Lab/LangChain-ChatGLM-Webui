@@ -1,4 +1,4 @@
-langchain
+langchain>=0.0.146
 fschat
 accelerate
 duckduckgo_search
@@ -12,7 +12,7 @@ beautifulsoup4
 icetk
 cpm_kernels
 faiss-cpu
-gradio
+gradio==3.24.1
 nltk
-accelerate
+langchain-serve
 detectron2@git+https://github.com/facebookresearch/detectron2.git@v0.6#egg=detectron2
