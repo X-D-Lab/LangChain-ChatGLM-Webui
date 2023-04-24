@@ -5,8 +5,8 @@ RUN apt-get update && \
 
 WORKDIR /build
 RUN pip install --upgrade pip
-RUN pip install torch PyPDF2 pdfrw unstructured accelerate
-RUN pip install "detectron2@git+https://github.com/facebookresearch/detectron2.git@e2ce8dc#egg=detectron2"
-COPY . .
+RUN pip install --user torch torchvision tensorboard cython PyPDF2 pdfrw -i https://pypi.tuna.tsinghua.edu.cn/simple
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-CMD ["python3", ""app.py"]
+COPY . .
+CMD ["python3", "app.py"]
