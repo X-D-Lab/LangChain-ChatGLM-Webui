@@ -294,7 +294,6 @@ if __name__ == "__main__":
                            outputs=[message, chatbot, state])
         gr.Markdown("""提醒：<br>
         1. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
-        2. 请勿上传或输入敏感内容，否则输出内容将被平台拦截返回error.<br>
-        3. 有任何使用问题，请通过[问题交流区](https://modelscope.cn/studios/thomas/ChatYuan-test/comment)或[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
+        2. 有任何使用问题，请通过[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
     demo.queue().launch(server_name='0.0.0.0', share=False)
