@@ -63,7 +63,7 @@ class ChatLLM(LLM):
     temperature: float = 0.1
     top_p = 0.9
     history = []
-    model_name_or_path: str = "THUDM/chatglm-6b",
+    model_name_or_path: str = "THUDM/chatglm-6b-int8",
     tokenizer: object = None
     model: object = None
 
@@ -91,6 +91,11 @@ class ChatLLM(LLM):
             outputs = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0]
             skip_echo_len = compute_skip_echo_len(self.model_name_or_path, conv, prompt)
             response = outputs[skip_echo_len:]
+            torch_gc()
+            if stop is not None:
+                response = enforce_stop_tokens(response, stop)
+            self.history =  [[None, response]]
+
             self.history =  [[None, response]]
 
         elif 'belle' in self.model_name_or_path.lower():
@@ -99,6 +104,9 @@ class ChatLLM(LLM):
             generate_ids =  self.model.generate(input_ids, max_new_tokens=self.max_token, do_sample = True, top_k = 30, top_p = self.top_p, temperature = self.temperature, repetition_penalty=1., eos_token_id=2, bos_token_id=1, pad_token_id=0)
             output = self.tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
             response = output[len(prompt)+1:]
+            torch_gc()
+            if stop is not None:
+                response = enforce_stop_tokens(response, stop)
             self.history =  [[None, response]]
 
         else:     

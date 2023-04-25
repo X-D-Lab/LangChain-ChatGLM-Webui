@@ -3,7 +3,6 @@ import os
 import gradio as gr
 import nltk
 import sentence_transformers
-import torch
 from duckduckgo_search import ddg
 from duckduckgo_search.utils import SESSION
 from langchain.chains import RetrievalQA
@@ -15,32 +14,17 @@ from langchain.vectorstores import FAISS
 
 from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
+from config import *
 
 nltk.data.path.append('./nltk_data')
 
-embedding_model_dict = {
-    "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
-    "ernie-base": "nghuyong/ernie-3.0-base-zh",
-    "ernie-medium": "nghuyong/ernie-3.0-medium-zh",
-    "ernie-xbase": "nghuyong/ernie-3.0-xbase-zh",
-    "text2vec-base": "GanymedeNil/text2vec-base-chinese"
-}
-
-llm_model_dict = {
-    "ChatGLM-6B": "THUDM/chatglm-6b",
-    "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
-    "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
-    "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
-    "LocalModels": "/models/" # 需要用户自行提供本地路径
-}
-
-EMBEDDING_DEVICE = "cuda" if torch.cuda.is_available(
-) else "mps" if torch.backends.mps.is_available() else "cpu"
-
-LLM_DEVICE = "cuda" if torch.cuda.is_available(
-) else "mps" if torch.backends.mps.is_available() else "cpu"
-
-num_gpus = torch.cuda.device_count()
+embedding_model_dict = embedding_model_dict
+llm_model_dict = llm_model_dict
+EMBEDDING_DEVICE = EMBEDDING_DEVICE
+LLM_DEVICE = LLM_DEVICE
+num_gpus = num_gpus
+init_llm = init_llm
+init_embedding_model = init_embedding_model
 
 
 def search_web(query):
@@ -64,8 +48,8 @@ class KnowledgeBasedChatLLM:
 
     def init_model_config(
         self,
-        large_language_model: str = 'ChatGLM-6B-int8',
-        embedding_model: str = 'text2vec-base',
+        large_language_model: str = init_llm,
+        embedding_model: str = init_embedding_model,
     ):
 
         self.llm = ChatLLM()
@@ -149,7 +133,6 @@ def update_status(history, status):
     return history
 
 
-KnowledgeBasedChatLLM
 knowladge_based_chat_llm = KnowledgeBasedChatLLM()
 
 
@@ -231,12 +214,12 @@ if __name__ == "__main__":
                     large_language_model = gr.Dropdown(
                         list(llm_model_dict.keys()),
                         label="large language model",
-                        value="ChatGLM-6B-int8")
+                        value=init_llm)
 
                     embedding_model = gr.Dropdown(list(
                         embedding_model_dict.keys()),
                                                   label="Embedding model",
-                                                  value="text2vec-base")
+                                                  value=init_embedding_model)
                     load_model_button = gr.Button("重新加载模型")
                 model_argument = gr.Accordion("模型参数配置")
                 with model_argument:
