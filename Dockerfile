@@ -1,6 +1,6 @@
 FROM nvidia/cuda:11.7.1-devel-ubuntu22.04
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y git python3 python3-dev python3-pip build-essential libmagic-dev poppler-utils tesseract-ocr libreoffice vim libgl1-mesa-glx && \
+    apt-get install --no-install-recommends -y git python3 python3-dev python3-pip build-essential libmagic-dev poppler-utils tesseract-ocr libreoffice vim libgl1-mesa-glx aria2c unzip && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
