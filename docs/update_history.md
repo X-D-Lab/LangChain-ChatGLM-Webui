@@ -1,8 +1,12 @@
 # 更新日志
 
+## Apr 25 2023
+1. 上传项目镜像至阿里云。`registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:latest`
+2. 优化Docker 部署说明
 ## Apr 24 2023
 
 1. 提供群聊沟通
+2. 更新 Dockerfile及requirements.txt
 
 ## Apr 22 2023
 
