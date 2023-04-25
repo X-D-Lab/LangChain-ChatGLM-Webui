@@ -9,14 +9,16 @@ from langchain.llms.base import LLM
 from langchain.llms.utils import enforce_stop_tokens
 from transformers import AutoModel, AutoModelForCausalLM, AutoTokenizer
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+from config import *
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-DEVICE = "cuda"
+DEVICE = LLM_DEVICE
 DEVICE_ID = "0"
 CUDA_DEVICE = f"{DEVICE}:{DEVICE_ID}" if DEVICE_ID else DEVICE
 
+init_llm = init_llm
+init_embedding_model = init_embedding_model
 
 def torch_gc():
     if torch.cuda.is_available():
@@ -63,7 +65,7 @@ class ChatLLM(LLM):
     temperature: float = 0.1
     top_p = 0.9
     history = []
-    model_name_or_path: str = "THUDM/chatglm-6b-int8",
+    model_name_or_path: str = init_llm,
     tokenizer: object = None
     model: object = None
 
@@ -94,8 +96,6 @@ class ChatLLM(LLM):
             torch_gc()
             if stop is not None:
                 response = enforce_stop_tokens(response, stop)
-            self.history =  [[None, response]]
-
             self.history =  [[None, response]]
 
         elif 'belle' in self.model_name_or_path.lower():

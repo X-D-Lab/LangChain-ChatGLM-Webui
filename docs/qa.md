@@ -1,48 +1,8 @@
-<img src='./img/bg.jpg'>
- <p align="center">
-  <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui"><img src="https://img.shields.io/badge/GitHub-24292e" alt="github"></a>
-  <a href="https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM"><img src="https://img.shields.io/badge/HuggingFace-yellow" alt="HuggingFace"></a>
-  <a href="https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary"><img src="https://img.shields.io/badge/ModelScope-blueviolet" alt="modelscope"></a>
-  <a href="https://openi.pcl.ac.cn/Learning-Develop-Union/LangChain-ChatGLM-Webui"><img src="https://img.shields.io/badge/-OpenI-337AFF" alt="OpenI"></a>
-   <a href="https://www.bilibili.com/video/BV1So4y1L7Hb/?share_source=copy_web&vd_source=8162f92b2a1a94035ca9e4e0f6e1860a"><img src="https://img.shields.io/badge/-bilibili-ff69b4" alt="bilibili"></a> 
-</p> 
-<p align="center">
-<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/thomas-yanxin/LangChain-ChatGLM-Webui?color=brightgreen" /></a>
-<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/graphs/contributors">
-<img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/thomas-yanxin/LangChain-ChatGLM-Webui" />
-</a>
-<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues"><img alt="Issues" src="https://img.shields.io/github/issues/thomas-yanxin/LangChain-ChatGLM-Webui?color=0088ff" /></a>
-<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pulls"><img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/thomas-yanxin/LangChain-ChatGLM-Webui?color=orange" /></a>
-</p>
-<p align="center">  
-   <a href="https://www.bilibili.com/video/BV1So4y1L7Hb/?share_source=copy_web&vd_source=8162f92b2a1a94035ca9e4e0f6e1860a"><strong>视频链接</strong></a> | <a href="https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM"><strong>在线体验</strong></a> | <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/blob/master/docs/deploy.md"><strong>部署文档</strong></a>| <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/blob/master/docs/update_history.md"><strong>更新日志</strong></a> | <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/blob/master/docs/qa.md"><strong>常见问题</strong></a> 
+# 常见问题
 
-</p>
+### 模型下载问题
 
-## 🔥项目体验
-
-本项目提供基于[HuggingFace社区](https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM)和[ModelScope魔搭社区](https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary)的在线体验, 欢迎尝试和反馈!  
-
-## 👏项目介绍
-
-受[langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)启发, 利用LangChain和ChatGLM-6B系列模型制作的Webui, 提供基于本地知识的大模型应用.
-
-目前支持上传 txt、docx、md、pdf等文本格式文件, 提供包括ChatGLM-6B系列、Belle系列等模型文件以及[GanymedeNil/text2vec-large-chinese](https://huggingface.co/GanymedeNil/text2vec-large-chinese)、[nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)、[nghuyong/ernie-3.0-nano-zh](https://huggingface.co/nghuyong/ernie-3.0-nano-zh)等Embedding模型.
-
-效果如下:
-![](./img/demo_hf.jpg)
-![](./img/demo_ms.jpg)
-
-## 🚀使用方式
-
-提供ModelScope版本和HuggingFace版本.  
-**需要Python>=3.8.1**  
-
-详细部署教程可参考: [部署文档](./docs/deploy.md) | [视频教程](https://www.bilibili.com/video/BV1No4y1b7eu/)
-
-### 支持模型
-
-若存在网络问题可点击以下链接快速下载:   
+对于国内用户来说, 直接从HuggingFace下载模型可能会遇到网络阻碍, 您可以先通过以下链接提前将模型下载并解压到本地:  
 | large language model | Embedding model |
 | :----: | :----: |
 | [ChatGLM-6B](https://s3.openi.org.cn/opendata/attachment/b/3/b33c55bb-8e7c-4e9d-90e5-c310dcc776d9?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=1fa9e58b6899afd26dd3%2F20230424%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230424T014727Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22chatglm-6b.zip%22&X-Amz-Signature=7324f73e66ee6ec9b955023d4f56076e3817b7daf14e874865c45f409094adf3) | [text2vec-large-chinese](https://s3.openi.org.cn/opendata/attachment/a/2/a2f0edca-1b7b-4dfc-b7c8-15730d33cc3e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=1fa9e58b6899afd26dd3%2F20230424%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230424T050110Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22text2vec-large-chinese.zip%22&X-Amz-Signature=a2e1bdb16f7b55fa05e134649ea1967c0be32d7afbcd300ea82202cc3a7aae6c) |
@@ -54,30 +14,43 @@
 | [BELLE-LLaMA-13B-2M](https://s3.openi.org.cn/opendata/attachment/a/c/acb0655f-4d3c-49c4-8320-f4b8584cf5bb?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=1fa9e58b6899afd26dd3%2F20230424%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230424T014910Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22BELLE-LLaMA-13B-2M.zip%22&X-Amz-Signature=7409fd2eba9768e720380759601cd462deabb3ebb24f493b21e1762b5f3410da) | | 
 | Minimax | |
 
-## 💪更新日志
+然后在 `app.py` 文件中对以下字段进行修改:  
 
-详情请见: [更新日志](./docs/update_history.md)
+```python
 
-项目处于初期阶段, 有很多可以做的地方和优化的空间, 欢迎感兴趣的社区大佬们一起加入!
+embedding_model_dict = {
 
-## ❤️引用
+    "ernie-tiny": "your_model_path",
+    "ernie-base": "your_model_path",
+    "ernie-medium": "your_model_path",
+    "ernie-xbase": "your_model_path",
+    "text2vec": "your_model_path"
+}
 
-1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B): ChatGLM-6B: 开源双语对话语言模型
-2. [LangChain](https://github.com/hwchase17/langchain): Building applications with LLMs through composability
-3. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM): 基于本地知识的 ChatGLM 应用实现
+llm_model_dict = {
 
-## 🙇‍感谢
+    "ChatGLM-6B": "your_model_path",
+    "ChatGLM-6B-int4": "your_model_path",
+    "ChatGLM-6B-int8": "your_model_path",
+    "ChatGLM-6b-int4-qe": "your_model_path"
+}
+```
 
-1. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)提供的基础框架
-2. [魔搭ModelScope](https://modelscope.cn/home)提供展示空间
-3. [OpenI启智社区](https://openi.pcl.ac.cn/)提供调试算力
-4. [langchain-serve](https://github.com/jina-ai/langchain-serve)提供十分简易的Serving方式
-5. [@online2311](https://github.com/online2311)进行[多卡测试](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/4)、[增加外部访问支持、增加ChatGLM-6b-local 本地模型读取路径、修复text2vec 无法加载的错误、增加 Dockerfile、增加Docker 使用说明](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pull/6)
+### 爆显存问题
 
-## Star History
+* ChatGLM-6B 模型硬件需求
+    | **量化等级**   | **最低 GPU 显存**（推理） | **最低 GPU 显存**（高效参数微调） |
+    | -------------- | ------------------------- | --------------------------------- |
+    | FP16（无量化） | 13 GB                     | 14 GB                             |
+    | INT8           | 8 GB                     | 9 GB                             |
+    | INT4           | 6 GB                      | 7 GB                              |
 
-[![Star History Chart](https://api.star-history.com/svg?repos=thomas-yanxin/LangChain-ChatGLM-Webui&type=Date)](https://star-history.com/#thomas-yanxin/LangChain-ChatGLM-Webui&Date)
+若您的设备显存有限
 
-## 加群沟通
+1. 可以选择 `ChatGLM-6B-int8` 或者 `ChatGLM-6B-int4` 以及选择较小的Embedding Model进行组合使用.
+2. 参数选择时，可以选择叫小的history进行尝试.
 
-<div> <img src="./img/wechat_group.jpg" width = 50%/> </div>
+### 常见的细节问题
+
+1. 需要等文件完全上传之后再进行对话 
+2. 若detectron2安装有问题, 可以执行:`pip install 'git+https://openi.pcl.ac.cn/Learning-Develop-Union/detectron2.git'`

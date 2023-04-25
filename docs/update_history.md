@@ -1,5 +1,9 @@
 # 更新日志
 
+## Apr 26 2023
+
+1. 增加API调用
+
 ## Apr 25 2023
 
 1. 上传项目镜像至阿里云。`registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:latest`
@@ -9,6 +13,7 @@
 5. 优化 Dockerfile
 6. config.py 增加本地Models参数
 7. 构建 `registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:Base` 基础镜像
+上述由[@online2311](https://github.com/online2311)贡献
 
 ## Apr 24 2023
 
@@ -47,7 +52,7 @@
 5. 增加ChatGLM-6b-local以及本地模型读取路径
 6. 修复text2vec无法加载的错误
 
-上述2-6来自社区[@online2311](https://github.com/online2311)
+上述2-6由社区[@online2311](https://github.com/online2311)贡献
 
 ## Apr 18 2023
 
