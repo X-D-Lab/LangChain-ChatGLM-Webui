@@ -30,8 +30,10 @@
 目前支持上传 txt、docx、md、pdf等文本格式文件, 提供包括ChatGLM-6B系列、Belle系列等模型文件以及[GanymedeNil/text2vec-large-chinese](https://huggingface.co/GanymedeNil/text2vec-large-chinese)、[nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)、[nghuyong/ernie-3.0-nano-zh](https://huggingface.co/nghuyong/ernie-3.0-nano-zh)等Embedding模型.
 
 效果如下:
-![](./img/demo_hf.jpg)
-![](./img/demo_ms.jpg)
+<details><summary><b>HuggingFace效果</b></summary>
+![](./img/demo_hf.jpg)</details>
+<details><summary><b>ModelScope效果</b></summary>
+![](./img/demo_ms.jpg)</details>
 
 ## 🚀使用方式
 
@@ -74,10 +76,10 @@
 4. [langchain-serve](https://github.com/jina-ai/langchain-serve)提供十分简易的Serving方式
 5. [@online2311](https://github.com/online2311)进行[多卡测试](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/4)、[增加外部访问支持、增加ChatGLM-6b-local 本地模型读取路径、修复text2vec 无法加载的错误、增加 Dockerfile、增加Docker 使用说明](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pull/6)
 
-## Star History
+## 🌟Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=thomas-yanxin/LangChain-ChatGLM-Webui&type=Date)](https://star-history.com/#thomas-yanxin/LangChain-ChatGLM-Webui&Date)
 
-## 加群沟通
+## 😊加群沟通
 
 <div> <img src="./img/wechat_group.jpg" width = 50%/> </div>
