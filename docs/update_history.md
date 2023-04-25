@@ -2,23 +2,25 @@
 
 ## Apr 26 2023
 
-1. 增加API调用
+1. 增加Jina Serving API调用
+2. 完善Readme描述
 
 ## Apr 25 2023
 
-1. 上传项目镜像至阿里云。`registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:latest`
-2. 优化Docker 部署说明
+1. 上传项目镜像至阿里云：`registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:latest`
+2. 优化Docker部署说明
 3. 提供单独的config.py配置文件
-4. Dockerfile 增加aria2c unzip
-5. 优化 Dockerfile
+4. Dockerfile增加aria2c unzip
+5. 优化Dockerfile
 6. config.py 增加本地Models参数
-7. 构建 `registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:Base` 基础镜像
+7. 构建基础镜像: `registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:Base`  
+
 上述由[@online2311](https://github.com/online2311)贡献
 
 ## Apr 24 2023
 
 1. 提供群聊沟通
-2. 更新 Dockerfile及requirements.txt
+2. 更新Dockerfile及requirements.txt
 
 ## Apr 22 2023
 
