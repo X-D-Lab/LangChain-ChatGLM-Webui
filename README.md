@@ -47,13 +47,20 @@
 
 详细部署教程可参考: [部署文档](./docs/deploy.md) | [视频教程](https://www.bilibili.com/video/BV1No4y1b7eu/)
 
-### Docker部署
+### Docker编译
 
 1. 编译镜像：`docker build -t langchain-chatglm-webui . `
-2. 运行镜像：`docker run -it --rm --runtime=nvidia --gpus all --network host -v /home/nodecloud/ptuning/chatglm-6b:/data/chatglm-6b langchain-chatglm-webui`
-3. 访问服务：`http://ip:7861`
+2. 运行镜像：`docker run -it --rm --runtime=nvidia --gpus all --network host langchain-chatglm-webui`
 
-自适应多GPU场景, 增加多GPU并行处理能力.
+### Docker运行
+1. 运行镜像：`docker run -d --name langchain-ChatGLM-webui --runtime=nvidia --gpus all --network host registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:latest`
+2. 挂载cache 方式容器重启或者更新需要重新下载相关模型。 `-v langchain-ChatGLM-webui-cache:/root/.cache/` 
+3. 挂载外部模型，选择 LocalModels 使用本地模型。 `-v ~/THUDM_chatglm-6b/:/models`
+4. 访问服务：`http://ip:7861`
+5.  运行环境，镜像大小约16G。
+6.  自适应多GPU场景, 增加多GPU并行处理能力.
+7.  镜像默认加载模型chatglm-6B
+8.  nvidia-runtime 请参考: [container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
 
 ### 支持模型
 
