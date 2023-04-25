@@ -30,5 +30,7 @@ llm_model_dict = {
     "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
     "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
     "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
-    "LocalModels": "/models/"  # 需要用户自行提供本地路径,支持Vicuna、Belle系列模型
+    "BELLE-LLaMA-Local": "/pretrainmodel/belle",
+    "Vicuna-Local": "/pretrainmodel/vicuna",
+    "ChatGLM-Local": "/pretrainmodel/chatglm"
 }

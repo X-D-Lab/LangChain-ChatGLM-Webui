@@ -6,6 +6,9 @@
 2. 优化Docker 部署说明
 3. 提供单独的config.py配置文件
 4. Dockerfile 增加aria2c unzip
+5. 优化 Dockerfile
+6. config.py 增加本地Models参数
+7. 构建 `registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:Base` 基础镜像
 
 ## Apr 24 2023
 
