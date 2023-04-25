@@ -19,23 +19,28 @@
 
 </p>
 
-## 🔥项目体验
+## 🔥 项目体验
 
 本项目提供基于[HuggingFace社区](https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM)和[ModelScope魔搭社区](https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary)的在线体验, 欢迎尝试和反馈!  
 
-## 👏项目介绍
+## 👏 项目介绍
 
 受[langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)启发, 利用LangChain和ChatGLM-6B系列模型制作的Webui, 提供基于本地知识的大模型应用.
 
 目前支持上传 txt、docx、md、pdf等文本格式文件, 提供包括ChatGLM-6B系列、Belle系列等模型文件以及[GanymedeNil/text2vec-large-chinese](https://huggingface.co/GanymedeNil/text2vec-large-chinese)、[nghuyong/ernie-3.0-base-zh](https://huggingface.co/nghuyong/ernie-3.0-base-zh)、[nghuyong/ernie-3.0-nano-zh](https://huggingface.co/nghuyong/ernie-3.0-nano-zh)等Embedding模型.
 
-效果如下:
 <details><summary><b>HuggingFace效果</b></summary>
-![](./img/demo_hf.jpg)</details>
-<details><summary><b>ModelScope效果</b></summary>
-![](./img/demo_ms.jpg)</details>
 
-## 🚀使用方式
+![](./img/demo_hf.jpg)
+
+</details>
+<details><summary><b>ModelScope效果</b></summary>
+
+![](./img/demo_ms.jpg)
+
+</details>
+
+## 🚀 使用方式
 
 提供ModelScope版本和HuggingFace版本.  
 **需要Python>=3.8.1**  
@@ -56,19 +61,19 @@
 | [BELLE-LLaMA-13B-2M](https://s3.openi.org.cn/opendata/attachment/a/c/acb0655f-4d3c-49c4-8320-f4b8584cf5bb?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=1fa9e58b6899afd26dd3%2F20230424%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230424T014910Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22BELLE-LLaMA-13B-2M.zip%22&X-Amz-Signature=7409fd2eba9768e720380759601cd462deabb3ebb24f493b21e1762b5f3410da) | | 
 | Minimax | |
 
-## 💪更新日志
+## 💪 更新日志
 
 详情请见: [更新日志](./docs/update_history.md)
 
 项目处于初期阶段, 有很多可以做的地方和优化的空间, 欢迎感兴趣的社区大佬们一起加入!
 
-## ❤️引用
+## ❤️ 引用
 
 1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B): ChatGLM-6B: 开源双语对话语言模型
 2. [LangChain](https://github.com/hwchase17/langchain): Building applications with LLMs through composability
 3. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM): 基于本地知识的 ChatGLM 应用实现
 
-## 🙇‍感谢
+## 🙇‍ ‍感谢
 
 1. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM)提供的基础框架
 2. [魔搭ModelScope](https://modelscope.cn/home)提供展示空间
@@ -76,10 +81,10 @@
 4. [langchain-serve](https://github.com/jina-ai/langchain-serve)提供十分简易的Serving方式
 5. [@online2311](https://github.com/online2311)进行[多卡测试](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/4)、[增加外部访问支持、增加ChatGLM-6b-local 本地模型读取路径、修复text2vec 无法加载的错误、增加 Dockerfile、增加Docker 使用说明](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pull/6)
 
-## 🌟Star History
+## 🌟 Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=thomas-yanxin/LangChain-ChatGLM-Webui&type=Date)](https://star-history.com/#thomas-yanxin/LangChain-ChatGLM-Webui&Date)
 
-## 😊加群沟通
+## 😊 加群沟通
 
 <div> <img src="./img/wechat_group.jpg" width = 50%/> </div>
