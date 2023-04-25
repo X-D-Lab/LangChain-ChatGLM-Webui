@@ -1,9 +1,9 @@
-langchain>=0.0.146
-fschat
+langchain==0.0.147
+fschat==0.2.3
 accelerate
 duckduckgo_search
-git+https://github.com/huggingface/transformers
-tokenizers>=0.13.3
+transformers>=4.28.0
+tokenizers
 unstructured[local-inference]
 layoutparser[layoutmodels,tesseract]
 nltk
@@ -12,5 +12,5 @@ beautifulsoup4
 icetk
 cpm_kernels
 faiss-cpu
-nltk
-detectron2@git+https://github.com/facebookresearch/detectron2.git@v0.6#egg=detectron2
+detectron2@git+https://github.com/facebookresearch/detectron2.git@e2ce8dc#egg=detectron2
+wandb==0.13.0
