@@ -14,5 +14,6 @@ cpm_kernels
 faiss-cpu
 detectron2@git+https://github.com/facebookresearch/detectron2.git@e2ce8dc#egg=detectron2
 wandb==0.13.0
+jina>=3.15.0
 langchain-serve
 protobuf==3.19.0
