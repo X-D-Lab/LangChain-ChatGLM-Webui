@@ -116,7 +116,6 @@ class KnowledgeBasedChatLLM:
                     print(e)
                     print(f"{file} 未能成功加载")
         if len(docs) > 0:
-            print("开始构建向量库")
             if vector_store_path and os.path.isdir(vector_store_path):
                 vector_store = FAISS.load_local(vector_store_path,
                                                 self.embeddings)
