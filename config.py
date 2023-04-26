@@ -9,6 +9,8 @@ EMBEDDING_DEVICE = "cuda" if torch.cuda.is_available(
 LLM_DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
 
+MODEL_CACHE_PATH = os.path.join(os.path.dirname(__file__), 'model_cache')
+
 num_gpus = torch.cuda.device_count()
 
 # init model config

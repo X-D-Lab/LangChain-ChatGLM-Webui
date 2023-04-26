@@ -27,7 +27,7 @@
 
 ## Docker 基础环境运行
 
-1. 运行镜像：`docker run -it --rm --runtime=nvidia --gpus all --network host registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:latest`
+1. 运行镜像：`docker run -it --rm --runtime=nvidia --gpus all --network host registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:Base bash`
 2. git clone项目: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`
 3. 进入本项目目录：`cd LangChain-ChatGLM-Webui`
 4. 安装依赖包：`pip3 install -r requirements.txt`

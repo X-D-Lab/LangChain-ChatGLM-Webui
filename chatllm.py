@@ -133,19 +133,19 @@ class ChatLLM(LLM):
                    **kwargs):
         if 'chatglm' in self.model_name_or_path.lower():
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_name_or_path,
-                                                       trust_remote_code=True)                            
+                                                       trust_remote_code=True, cache_dir=os.path.join(MODEL_CACHE_PATH, self.model_name_or_path))                            
             if torch.cuda.is_available() and llm_device.lower().startswith("cuda"):
                 # 根据当前设备GPU数量决定是否进行多卡部署
                 num_gpus = torch.cuda.device_count()
                 if num_gpus < 2 and device_map is None:
                     self.model = (AutoModel.from_pretrained(
-                        self.model_name_or_path, trust_remote_code=True,
+                        self.model_name_or_path, trust_remote_code=True, cache_dir=os.path.join(MODEL_CACHE_PATH, self.model_name_or_path), 
                         **kwargs).half().cuda())
                 else:
                     from accelerate import dispatch_model
 
                     model = AutoModel.from_pretrained(self.model_name_or_path,
-                                                    trust_remote_code=True,
+                                                    trust_remote_code=True, cache_dir=os.path.join(MODEL_CACHE_PATH, self.model_name_or_path),
                                                     **kwargs).half()
                     # 可传入device_map自定义每张卡的部署情况
                     if device_map is None:
@@ -155,7 +155,7 @@ class ChatLLM(LLM):
             else:
                 self.model = (AutoModel.from_pretrained(
                     self.model_name_or_path,
-                    trust_remote_code=True).float().to(llm_device))
+                    trust_remote_code=True, cache_dir=os.path.join(MODEL_CACHE_PATH, self.model_name_or_path)).float().to(llm_device))
             self.model = self.model.eval()
 
         else:     
