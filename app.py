@@ -61,7 +61,7 @@ class KnowledgeBasedChatLLM:
         self.embeddings = HuggingFaceEmbeddings(
             model_name=embedding_model_dict[embedding_model], )
         self.embeddings.client = sentence_transformers.SentenceTransformer(
-            self.embeddings.model_name, device=EMBEDDING_DEVICE)
+            self.embeddings.model_name, device=EMBEDDING_DEVICE, cache_folder=os.path.join(MODEL_CACHE_PATH, self.embeddings.model_name))
         self.llm = ChatLLM()
         if 'chatglm' in large_language_model.lower():
             self.llm.model_type = 'chatglm'
