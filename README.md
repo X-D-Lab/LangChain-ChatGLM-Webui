@@ -72,6 +72,50 @@
 1. [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B): ChatGLM-6B: 开源双语对话语言模型
 2. [LangChain](https://github.com/hwchase17/langchain): Building applications with LLMs through composability
 3. [langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM): 基于本地知识的 ChatGLM 应用实现
+<details><summary><b>ChatGLM论文引用</b></summary>
+
+```
+@inproceedings{
+  zeng2023glm-130b,
+  title={{GLM}-130B: An Open Bilingual Pre-trained Model},
+  author={Aohan Zeng and Xiao Liu and Zhengxiao Du and Zihan Wang and Hanyu Lai and Ming Ding and Zhuoyi Yang and Yifan Xu and Wendi Zheng and Xiao Xia and Weng Lam Tam and Zixuan Ma and Yufei Xue and Jidong Zhai and Wenguang Chen and Zhiyuan Liu and Peng Zhang and Yuxiao Dong and Jie Tang},
+  booktitle={The Eleventh International Conference on Learning Representations (ICLR)},
+  year={2023},
+  url={https://openreview.net/forum?id=-Aw0rrrPUF}
+}
+```
+
+```
+@inproceedings{du2022glm,
+  title={GLM: General Language Model Pretraining with Autoregressive Blank Infilling},
+  author={Du, Zhengxiao and Qian, Yujie and Liu, Xiao and Ding, Ming and Qiu, Jiezhong and Yang, Zhilin and Tang, Jie},
+  booktitle={Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages={320--335},
+  year={2022}
+}
+```
+
+</details>
+<details><summary><b>BELLE论文引用</b></summary>
+
+```
+@misc{BELLE,
+  author = {Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Baochang Ma and Xiangang Li},
+  title = {BELLE: Be Everyone's Large Language model Engine },
+  year = {2023},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/LianjiaTech/BELLE}},
+}
+@article{belle2023exploring,
+  title={Exploring the Impact of Instruction Data Scaling on Large Language Models: An Empirical Study on Real-World Use Cases},
+  author={Yunjie Ji, Yong Deng, Yan Gong, Yiping Peng, Qiang Niu, Lei Zhang, Baochang Ma, Xiangang Li},
+  journal={arXiv preprint arXiv:2303.14742},
+  year={2023}
+}
+```
+
+</details>
 
 ## 🙇‍ ‍感谢
 
@@ -79,7 +123,8 @@
 2. [魔搭ModelScope](https://modelscope.cn/home)提供展示空间
 3. [OpenI启智社区](https://openi.pcl.ac.cn/)提供调试算力
 4. [langchain-serve](https://github.com/jina-ai/langchain-serve)提供十分简易的Serving方式
-5. [@online2311](https://github.com/online2311)进行[多卡测试](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/4)、[增加外部访问支持、增加ChatGLM-6b-local 本地模型读取路径、修复text2vec 无法加载的错误、增加 Dockerfile、增加Docker 使用说明](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pull/6)
+
+除此以外, 感谢来自社区的同学们对本项目的关注和支持!
 
 ## 🌟 Star History
 

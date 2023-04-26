@@ -6,6 +6,10 @@
 2. 完善Readme描述
 3. 修复切换模型时可能的潜在问题
 4. 修复Jina Serving的Crul命令
+5. 增加model cache目录@[AliscaCL](https://github.com/AliscaCL)
+6. 更新Docker镜像地址@[online2311](https://github.com/online2311)
+7. gradio发布时增加多项参数@[godlockin](https://github.com/godlockin)
+8. 修复安装依赖冲突@[online2311](https://github.com/online2311)
 
 ## Apr 25 2023
 
