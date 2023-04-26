@@ -315,4 +315,4 @@ if __name__ == "__main__":
                 server_port=17861, # the port for listening
                 show_api=False, # if display the api document
                 share=True, # if register a public url
-                inbrowser=False) # if browser would be open autometicly 
+                inbrowser=False) # if browser would be open automatically 
