@@ -40,9 +40,12 @@
 3. 运行环境，镜像大小约14G。
 4. nvidia-runtime 请参考: [container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
 5. 本地模型放置目录：  
- `BELLE-LLaMA-Local:/pretrainmodel/belle`   
- `Vicuna-Local:/pretrainmodel/vicuna`   
- `ChatGLM-Local:/pretrainmodel/chatglm`   
+ `BELLE-LLaMA-Local:/pretrainmodel/belle`
+
+ `Vicuna-Local:/pretrainmodel/vicuna`
+
+ `ChatGLM-Local:/pretrainmodel/chatglm`
+
 6. 挂载cache目录，容器重启或更新无需重新下载相关模型。  
  `-v langchain-ChatGLM-webui-cache:/root/.cache/`
 
@@ -62,7 +65,20 @@ curl -X 'POST' \
   }'
 ```
 
-3. 执行curl发送指令
+3. 执行curl构建向量库命令
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/vector_store' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "file_path": "./README.md", 
+    "vector_store_path": "./vector_store"
+  }'
+```
+
+4. 执行curl发送指令
 
 ```bash
 curl -X 'POST' \
@@ -71,7 +87,7 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -d '{
     "input": "ChatGLM-6B的具体局限性？", 
-    "file_path": "./README.md", 
+    "vector_store_path": "./vector_store", 
     "use_web": true, 
     "top_k": 3,  
     "history_len": 1, 

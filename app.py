@@ -32,6 +32,7 @@ for i in llm_model_dict:
     for j in llm_model_dict[i]:
         llm_model_list.append(j)
 
+
 def search_web(query):
 
     SESSION.proxies = {
@@ -57,21 +58,26 @@ class KnowledgeBasedChatLLM:
         embedding_model: str = init_embedding_model,
     ):
 
-
         self.embeddings = HuggingFaceEmbeddings(
             model_name=embedding_model_dict[embedding_model], )
         self.embeddings.client = sentence_transformers.SentenceTransformer(
-            self.embeddings.model_name, device=EMBEDDING_DEVICE, cache_folder=os.path.join(MODEL_CACHE_PATH, self.embeddings.model_name))
+            self.embeddings.model_name,
+            device=EMBEDDING_DEVICE,
+            cache_folder=os.path.join(MODEL_CACHE_PATH,
+                                      self.embeddings.model_name))
         self.llm = ChatLLM()
         if 'chatglm' in large_language_model.lower():
             self.llm.model_type = 'chatglm'
-            self.llm.model_name_or_path = llm_model_dict['chatglm'][large_language_model]
+            self.llm.model_name_or_path = llm_model_dict['chatglm'][
+                large_language_model]
         elif 'belle' in large_language_model.lower():
             self.llm.model_type = 'belle'
-            self.llm.model_name_or_path = llm_model_dict['belle'][large_language_model]
+            self.llm.model_name_or_path = llm_model_dict['belle'][
+                large_language_model]
         elif 'vicuna' in large_language_model.lower():
             self.llm.model_type = 'vicuna'
-            self.llm.model_name_or_path = llm_model_dict['vicuna'][large_language_model]
+            self.llm.model_name_or_path = llm_model_dict['vicuna'][
+                large_language_model]
         self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
 
     def init_knowledge_vector_store(self, filepath):
@@ -130,7 +136,10 @@ class KnowledgeBasedChatLLM:
         return result
 
     def load_file(self, filepath):
-        if filepath.lower().endswith(".pdf"):
+        if filepath.lower().endswith(".md"):
+            loader = UnstructuredFileLoader(filepath, mode="elements")
+            docs = loader.load()
+        elif filepath.lower().endswith(".pdf"):
             loader = UnstructuredFileLoader(filepath)
             textsplitter = ChineseTextSplitter(pdf=True)
             docs = loader.load_and_split(textsplitter)
@@ -315,5 +324,5 @@ if __name__ == "__main__":
         .launch(server_name='0.0.0.0', # ip for listening, 0.0.0.0 for every inbound traffic, 127.0.0.1 for local inbound
                 server_port=17861, # the port for listening
                 show_api=False, # if display the api document
-                share=True, # if register a public url
+                share=False, # if register a public url
                 inbrowser=False) # if browser would be open automatically

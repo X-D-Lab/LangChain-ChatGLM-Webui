@@ -1,5 +1,9 @@
 # 更新日志
 
+## Apr 27 2023
+
+1. 优化Jina Serving API，支持批量文件
+
 ## Apr 26 2023
 
 1. 增加Jina Serving API调用
