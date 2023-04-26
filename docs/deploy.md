@@ -36,16 +36,13 @@
 ## Docker 小白运行
 
 1. 运行镜像：`docker run -d --name langchain-ChatGLM-webui --runtime=nvidia --gpus all --network host registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:latest`
-2. 访问服务：`http://ip:7861`
+2. 访问服务：`http://ip:7860`
 3. 运行环境，镜像大小约14G。
 4. nvidia-runtime 请参考: [container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
 5. 本地模型放置目录：  
- `BELLE-LLaMA-Local:/pretrainmodel/belle`
-
- `Vicuna-Local:/pretrainmodel/vicuna`
-
- `ChatGLM-Local:/pretrainmodel/chatglm`
-
+ `BELLE-LLaMA-Local:/pretrainmodel/belle`   
+ `Vicuna-Local:/pretrainmodel/vicuna`   
+ `ChatGLM-Local:/pretrainmodel/chatglm`   
 6. 挂载cache目录，容器重启或更新无需重新下载相关模型。  
  `-v langchain-ChatGLM-webui-cache:/root/.cache/`
 
