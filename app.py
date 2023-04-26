@@ -26,6 +26,11 @@ num_gpus = num_gpus
 init_llm = init_llm
 init_embedding_model = init_embedding_model
 
+llm_model_list = []
+llm_model_dict = llm_model_dict
+for i in llm_model_dict:
+    for j in llm_model_dict[i]:
+        llm_model_list.append(j)
 
 def search_web(query):
 
@@ -52,12 +57,21 @@ class KnowledgeBasedChatLLM:
         embedding_model: str = init_embedding_model,
     ):
 
-        self.llm = ChatLLM()
-        self.llm.model_name_or_path = llm_model_dict[large_language_model]
+
         self.embeddings = HuggingFaceEmbeddings(
             model_name=embedding_model_dict[embedding_model], )
         self.embeddings.client = sentence_transformers.SentenceTransformer(
             self.embeddings.model_name, device=EMBEDDING_DEVICE)
+        self.llm = ChatLLM()
+        if 'chatglm' in large_language_model.lower():
+            self.llm.model_type = 'chatglm'
+            self.llm.model_name_or_path = llm_model_dict['chatglm'][large_language_model]
+        elif 'belle' in large_language_model.lower():
+            self.llm.model_type = 'belle'
+            self.llm.model_name_or_path = llm_model_dict['belle'][large_language_model]
+        elif 'vicuna' in large_language_model.lower():
+            self.llm.model_type = 'vicuna'
+            self.llm.model_name_or_path = llm_model_dict['vicuna'][large_language_model]
         self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
 
     def init_knowledge_vector_store(self, filepath):
@@ -212,7 +226,7 @@ if __name__ == "__main__":
                 model_choose = gr.Accordion("模型选择")
                 with model_choose:
                     large_language_model = gr.Dropdown(
-                        list(llm_model_dict.keys()),
+                        llm_model_list,
                         label="large language model",
                         value=init_llm)
 
@@ -296,4 +310,4 @@ if __name__ == "__main__":
         1. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
         2. 有任何使用问题，请通过[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
-    demo.queue().launch(server_name='0.0.0.0', share=False)
+    demo.queue().launch(share=False)
