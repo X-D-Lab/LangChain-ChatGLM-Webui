@@ -65,6 +65,7 @@ class ChatLLM(LLM):
     temperature: float = 0.1
     top_p = 0.9
     history = []
+    model_type: str = "chatglm"
     model_name_or_path: str = init_llm,
     tokenizer: object = None
     model: object = None
@@ -78,7 +79,7 @@ class ChatLLM(LLM):
 
     def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
 
-        if 'vicuna' in self.model_name_or_path.lower():
+        if self.model_type == 'vicuna':
             conv = get_default_conv_template(self.model_name_or_path).copy()
             conv.append_message(conv.roles[0], prompt)
             conv.append_message(conv.roles[1], None)
@@ -98,7 +99,7 @@ class ChatLLM(LLM):
                 response = enforce_stop_tokens(response, stop)
             self.history =  [[None, response]]
 
-        elif 'belle' in self.model_name_or_path.lower():
+        elif self.model_type == 'belle':
             prompt = "Human: "+ prompt +" \n\nAssistant: "
             input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.to(DEVICE)
             generate_ids =  self.model.generate(input_ids, max_new_tokens=self.max_token, do_sample = True, top_k = 30, top_p = self.top_p, temperature = self.temperature, repetition_penalty=1., eos_token_id=2, bos_token_id=1, pad_token_id=0)
@@ -109,7 +110,7 @@ class ChatLLM(LLM):
                 response = enforce_stop_tokens(response, stop)
             self.history =  [[None, response]]
 
-        else:     
+        elif self.model_type == 'chatglm':     
             response, _ = self.model.chat(
                 self.tokenizer,
                 prompt,

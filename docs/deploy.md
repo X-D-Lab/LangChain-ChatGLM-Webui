@@ -55,31 +55,31 @@
 2. 执行curl初始化模型命令  
 
 ```bash
-    curl -X 'POST' \
-      'http://localhost:8080/reinit_model' \
-      -H 'accept: application/json' \
-      -H 'Content-Type: application/json' \
-      -d '{
-        "large_language_model": "ChatGLM-6B-int8",
-        "embedding_model": "text2vec-base"
-      }'
+curl -X 'POST' \
+  'http://localhost:8080/reinit_model' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "large_language_model": "ChatGLM-6B-int8",
+    "embedding_model": "text2vec-base"
+  }'
 ```
 
 3. 执行curl发送指令
 
 ```bash
-    curl -X 'POST' \
-      'http://localhost:8080/predict' \
-      -H 'accept: application/json' \
-      -H 'Content-Type: application/json' \
-      -d '{
-        "input": "ChatGLM-6B的具体局限性？", 
-        "file_path": "./README.md", 
-        "use_web": true, 
-        "top_k": 3,  
-        "history_len": 1, 
-        "temperature": 0.01, 
-        "top_p": 0.1, 
-        "history": []
-      }'
+curl -X 'POST' \
+  'http://localhost:8080/predict' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "input": "ChatGLM-6B的具体局限性？", 
+    "file_path": "./README.md", 
+    "use_web": true, 
+    "top_k": 3,  
+    "history_len": 1, 
+    "temperature": 0.01, 
+    "top_p": 0.1, 
+    "history": []
+  }'
 ```

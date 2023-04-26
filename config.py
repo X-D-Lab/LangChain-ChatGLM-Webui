@@ -25,12 +25,18 @@ embedding_model_dict = {
     'simbert-base-chinese': 'WangZeJun/simbert-base-chinese'
 }
 
+
 llm_model_dict = {
-    "ChatGLM-6B": "THUDM/chatglm-6b",
-    "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
-    "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
-    "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
-    "BELLE-LLaMA-Local": "/pretrainmodel/belle",
-    "Vicuna-Local": "/pretrainmodel/vicuna",
-    "ChatGLM-Local": "/pretrainmodel/chatglm"
+    "chatglm": {
+        "ChatGLM-6B": "THUDM/chatglm-6b",
+        "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
+        "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
+        "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe"
+    },
+    "belle": {
+        "BELLE-LLaMA-Local": "/pretrainmodel/belle",
+    },
+    "vicuna": {
+        "Vicuna-Local": "/pretrainmodel/vicuna",
+    }
 }

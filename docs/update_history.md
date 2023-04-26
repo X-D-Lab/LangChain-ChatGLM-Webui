@@ -4,6 +4,8 @@
 
 1. 增加Jina Serving API调用
 2. 完善Readme描述
+3. 修复切换模型时可能的潜在问题
+4. 修复Jina Serving的Crul命令
 
 ## Apr 25 2023
 

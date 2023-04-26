@@ -55,7 +55,15 @@ class KnowledgeBasedChatLLM:
     ):
 
         self.llm = ChatLLM()
-        self.llm.model_name_or_path = llm_model_dict[large_language_model]
+        if 'chatglm' in large_language_model.lower():
+            self.llm.model_type = 'chatglm'
+            self.llm.model_name_or_path = llm_model_dict['chatglm'][large_language_model]
+        elif 'belle' in large_language_model.lower():
+            self.llm.model_type = 'belle'
+            self.llm.model_name_or_path = llm_model_dict['belle'][large_language_model]
+        elif 'vicuna' in large_language_model.lower():
+            self.llm.model_type = 'vicuna'
+            self.llm.model_name_or_path = llm_model_dict['vicuna'][large_language_model]
         self.embeddings = HuggingFaceEmbeddings(
             model_name=embedding_model_dict[embedding_model], )
         self.embeddings.client = sentence_transformers.SentenceTransformer(
