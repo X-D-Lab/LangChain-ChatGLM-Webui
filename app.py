@@ -310,4 +310,10 @@ if __name__ == "__main__":
         1. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
         2. 有任何使用问题，请通过[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
-    demo.queue().launch(share=False)
+    # threads to consume the request
+    demo.queue(concurrency_count=3) \
+        .launch(server_name='0.0.0.0', # ip for listening, 0.0.0.0 for every inbound traffic, 127.0.0.1 for local inbound
+                server_port=17861, # the port for listening
+                show_api=False, # if display the api document
+                share=True, # if register a public url
+                inbrowser=False) # if browser would be open automatically
