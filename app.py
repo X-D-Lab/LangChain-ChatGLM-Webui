@@ -296,4 +296,4 @@ if __name__ == "__main__":
         1. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
         2. 有任何使用问题，请通过[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
         """)
-    demo.queue().launch(server_name='0.0.0.0', share=False)
+    demo.queue().launch(share=False)
