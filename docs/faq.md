@@ -48,5 +48,5 @@ embedding_model_dict = {
 ### 常见的细节问题
 
 1. 需要等文件完全上传之后再进行对话 
-2. 若detectron2安装有问题, 可以执行:`pip install 'git+https://openi.pcl.ac.cn/Learning-Develop-Union/detectron2.git'`
+2. 若detectron2安装有问题, 可以执行:`pip install git+https://openi.pcl.ac.cn/Learning-Develop-Union/detectron2.git`
 3. 目前项目仅在linux环境下进行测试，win/mac下或许存在一些未知问题
