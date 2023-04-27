@@ -3,15 +3,17 @@ import os
 import torch
 
 # device config
+
 EMBEDDING_DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
-
 LLM_DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
 
 MODEL_CACHE_PATH = os.path.join(os.path.dirname(__file__), 'model_cache')
 
+# vector storage config
 VS_ROOT_PATH = './'
+
 num_gpus = torch.cuda.device_count()
 
 # init model config
@@ -25,7 +27,8 @@ embedding_model_dict = {
     "ernie-medium": "nghuyong/ernie-3.0-medium-zh",
     "ernie-xbase": "nghuyong/ernie-3.0-xbase-zh",
     "text2vec-base": "GanymedeNil/text2vec-base-chinese",
-    'simbert-base-chinese': 'WangZeJun/simbert-base-chinese'
+    'simbert-base-chinese': 'WangZeJun/simbert-base-chinese',
+    'paraphrase-multilingual-MiniLM-L12-v2': "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 }
 
 

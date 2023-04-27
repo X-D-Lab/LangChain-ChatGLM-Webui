@@ -16,7 +16,7 @@ from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
 from config import *
 
-nltk.data.path.append('./nltk_data')
+nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")] + nltk.data.path
 
 embedding_model_dict = embedding_model_dict
 llm_model_dict = llm_model_dict
