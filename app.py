@@ -322,7 +322,7 @@ if __name__ == "__main__":
     # threads to consume the request
     demo.queue(concurrency_count=3) \
         .launch(server_name='0.0.0.0', # ip for listening, 0.0.0.0 for every inbound traffic, 127.0.0.1 for local inbound
-                server_port=17861, # the port for listening
+                server_port=7860, # the port for listening
                 show_api=False, # if display the api document
                 share=False, # if register a public url
                 inbrowser=False) # if browser would be open automatically
