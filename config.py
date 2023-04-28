@@ -12,7 +12,7 @@ LLM_DEVICE = "cuda" if torch.cuda.is_available(
 MODEL_CACHE_PATH = os.path.join(os.path.dirname(__file__), 'model_cache')
 
 # vector storage config
-VS_ROOT_PATH = './vector_store'
+VS_ROOT_PATH = './'
 
 num_gpus = torch.cuda.device_count()
 
