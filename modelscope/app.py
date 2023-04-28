@@ -4,6 +4,7 @@ import gradio as gr
 import nltk
 import sentence_transformers
 import torch
+from chatglm_llm import ChatGLM
 from duckduckgo_search import ddg
 from duckduckgo_search.utils import SESSION
 from langchain.chains import RetrievalQA
@@ -11,8 +12,6 @@ from langchain.document_loaders import UnstructuredFileLoader
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import FAISS
-
-from chatllm import ChatGLM
 
 nltk.data.path.append('../nltk_data')
 

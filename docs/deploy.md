@@ -4,7 +4,7 @@
 
 ### 环境准备
 
-项目需要Python>=3.8.1
+**项目需要Python>=3.8.1, 默认已安装torch**
 
 1. git clone本项目, 您可以在自己的terminal中执行: `git clone https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui.git`. 若国内用户访问Github存在网络问题, 也可以执行: `https://openi.pcl.ac.cn/Learning-Develop-Union/LangChain-ChatGLM-Webui.git`
 2. 进入本项目目录：`cd LangChain-ChatGLM-Webui`
@@ -40,11 +40,9 @@
 3. 运行环境，镜像大小约14G。
 4. nvidia-runtime 请参考: [container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
 5. 本地模型放置目录：  
- `BELLE-LLaMA-Local:/pretrainmodel/belle`
-
- `Vicuna-Local:/pretrainmodel/vicuna`
-
- `ChatGLM-Local:/pretrainmodel/chatglm`
+ BELLE-LLaMA-Local:/pretrainmodel/belle  
+ Vicuna-Local:/pretrainmodel/vicuna  
+ ChatGLM-Local:/pretrainmodel/chatglm
 
 6. 挂载cache目录，容器重启或更新无需重新下载相关模型。  
  `-v langchain-ChatGLM-webui-cache:/root/.cache/`

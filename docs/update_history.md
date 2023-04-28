@@ -1,5 +1,14 @@
 # 更新日志
 
+## Apr 28 2023
+
+1. 增加推荐Embedding Model
+2. 修复modelscope引用chatglm_llm错误问题
+3. 修复相关注释问题
+4. 更新微信群二维码
+5. 完善FAQ和部署文档
+6. 增加Vicuna-13B-1.1模型
+
 ## Apr 27 2023
 
 1. 优化Jina Serving API，支持批量文件

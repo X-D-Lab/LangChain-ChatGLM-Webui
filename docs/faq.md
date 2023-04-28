@@ -12,29 +12,24 @@
 | [Vicuna-7b-1.1](https://s3.openi.org.cn/opendata/attachment/2/5/25854cfb-3d57-44ff-a842-2a98e1a2dafe?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=1fa9e58b6899afd26dd3%2F20230423%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230423T014232Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22vicuna-7b-1.1.zip%22&X-Amz-Signature=353d6295d5260d5c53ee512680b211b67fe91fab8376aaef4c17e477f09a666a) | [simbert-base-chinese](https://s3.openi.org.cn/opendata/attachment/1/9/19a54b2f-e527-47e1-aa16-62887498b7f7?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=1fa9e58b6899afd26dd3%2F20230423%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230423T033222Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22simbert-base-chinese.zip%22&X-Amz-Signature=6ba81f63582fcb5a45fdc33415aabd40cd8ce0e803d79388390006f5feec5def) | 
 | [BELLE-LLaMA-7B-2M](https://s3.openi.org.cn/opendata/attachment/2/6/26f570ea-03c8-4e48-8058-e90b4854edfb?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=1fa9e58b6899afd26dd3%2F20230424%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230424T045945Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22BELLE-LLaMA-7B-2M.zip%22&X-Amz-Signature=a3a06bbce4389e21e384d5831f3a484bfae29a4af5a71fb043c26e6282ac00ee) | | 
 | [BELLE-LLaMA-13B-2M](https://s3.openi.org.cn/opendata/attachment/a/c/acb0655f-4d3c-49c4-8320-f4b8584cf5bb?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=1fa9e58b6899afd26dd3%2F20230424%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230424T014910Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22BELLE-LLaMA-13B-2M.zip%22&X-Amz-Signature=7409fd2eba9768e720380759601cd462deabb3ebb24f493b21e1762b5f3410da) | | 
-| Minimax | |
 
-然后在 `app.py` 文件中对以下字段进行修改:  
+然后在 `config.py` 文件中对以下字段进行修改:  
 
 ```python
 
 embedding_model_dict = {
-
-    "ernie-tiny": "your_model_path",
+    "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
     "ernie-base": "your_model_path",
     "ernie-medium": "your_model_path",
     "ernie-xbase": "your_model_path",
-    "text2vec": "your_model_path"
+    "text2vec-base": "your_model_path",
+    'simbert-base-chinese': 'your_model_path',
+    'paraphrase-multilingual-MiniLM-L12-v2': "your_model_path"
 }
 
-llm_model_dict = {
-
-    "ChatGLM-6B": "your_model_path",
-    "ChatGLM-6B-int4": "your_model_path",
-    "ChatGLM-6B-int8": "your_model_path",
-    "ChatGLM-6b-int4-qe": "your_model_path"
-}
 ```
+
+具体路径仿见[issue 36](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/36)、[issue 37](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues/37)
 
 ### 爆显存问题
 
@@ -52,5 +47,6 @@ llm_model_dict = {
 
 ### 常见的细节问题
 
-1. 需要等文件完全上传之后再进行对话 
-2. 若detectron2安装有问题, 可以执行:`pip install 'git+https://openi.pcl.ac.cn/Learning-Develop-Union/detectron2.git'`
+1. 需要等文件完全上传之后再进行对话. 
+2. 若detectron2安装有问题, 可以执行:`pip install git+https://openi.pcl.ac.cn/Learning-Develop-Union/detectron2.git`.
+3. 目前项目仅在linux环境下进行测试，win/mac下或许存在一些未知问题.
