@@ -131,10 +131,10 @@ class KnowledgeBasedChatLLM:
                     path=VECTOR_STORE_PATH,
                     collection_name=COLLECTION_NAME,
                 )
-            return "文件均未成功加载，请检查依赖包或替换为其他文件再次上传。", loaded_files
+            return "文件均未成功加载，请检查依赖包或文件路径。", loaded_files
         else:
-            print("文件均未成功加载，请检查依赖包或替换为其他文件再次上传。")
-            return "文件均未成功加载，请检查依赖包或替换为其他文件再次上传。", loaded_files
+            print("文件均未成功加载，请检查依赖包或文件路径。")
+            return "文件均未成功加载，请检查依赖包或文件路径。", loaded_files
 
     def get_knowledge_based_answer(self,
                                    query,
