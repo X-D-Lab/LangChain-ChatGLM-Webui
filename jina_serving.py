@@ -2,8 +2,8 @@ import datetime
 import os
 from typing import List
 
-import gradio as gr
 import nltk
+import qdrant_client
 import sentence_transformers
 import torch
 from duckduckgo_search import ddg
@@ -13,24 +13,26 @@ from langchain.document_loaders import UnstructuredFileLoader
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.prompts.prompt import PromptTemplate
-from langchain.vectorstores import FAISS
+from langchain.vectorstores import Qdrant
 from lcserve import serving
 
 from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
 from config import *
 
-nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")] + nltk.data.path
+nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")
+                  ] + nltk.data.path
 
 embedding_model_dict = embedding_model_dict
 llm_model_dict = llm_model_dict
 EMBEDDING_DEVICE = EMBEDDING_DEVICE
 LLM_DEVICE = LLM_DEVICE
+VECTOR_STORE_PATH = VECTOR_STORE_PATH
+COLLECTION_NAME = COLLECTION_NAME
 num_gpus = num_gpus
 init_llm = init_llm
 init_embedding_model = init_embedding_model
 
-VS_ROOT_PATH = VS_ROOT_PATH
 
 
 def search_web(query):
@@ -77,9 +79,7 @@ class KnowledgeBasedChatLLM:
         self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
 
     def init_knowledge_vector_store(self,
-                                    filepath: str or List[str],
-                                    vector_store_path: str
-                                    or os.PathLike = None):
+                                    filepath: str or List[str],):
         loaded_files = []
         if isinstance(filepath, str):
             if not os.path.exists(filepath):
@@ -116,24 +116,28 @@ class KnowledgeBasedChatLLM:
                     print(e)
                     print(f"{file} 未能成功加载")
         if len(docs) > 0:
-            if vector_store_path and os.path.isdir(vector_store_path):
-                vector_store = FAISS.load_local(vector_store_path,
-                                                self.embeddings)
+            if VECTOR_STORE_PATH and os.path.isdir(VECTOR_STORE_PATH):
+                vector_store = Qdrant.from_documents(
+                    docs,
+                    self.embeddings,
+                    path=VECTOR_STORE_PATH,
+                    collection_name=COLLECTION_NAME,
+                )
                 vector_store.add_documents(docs)
             else:
-                if not vector_store_path:
-                    vector_store_path = f"""{VS_ROOT_PATH}{os.path.splitext(file)[0]}_FAISS_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}"""
-                vector_store = FAISS.from_documents(docs, self.embeddings)
-
-            vector_store.save_local(vector_store_path)
-            return vector_store_path, loaded_files
+                vector_store = Qdrant.from_documents(
+                    docs,
+                    self.embeddings,
+                    path=VECTOR_STORE_PATH,
+                    collection_name=COLLECTION_NAME,
+                )
+            return "文件均未成功加载，请检查依赖包或替换为其他文件再次上传。", loaded_files
         else:
             print("文件均未成功加载，请检查依赖包或替换为其他文件再次上传。")
             return "文件均未成功加载，请检查依赖包或替换为其他文件再次上传。", loaded_files
 
     def get_knowledge_based_answer(self,
                                    query,
-                                   vector_store_path,
                                    web_content,
                                    top_k: int = 6,
                                    history_len: int = 3,
@@ -165,11 +169,14 @@ class KnowledgeBasedChatLLM:
                                 input_variables=["context", "question"])
         self.llm.history = history[
             -self.history_len:] if self.history_len > 0 else []
-        vector_store = FAISS.load_local(vector_store_path, self.embeddings)
+        client = qdrant_client.QdrantClient(path=VECTOR_STORE_PATH,
+                                            prefer_grpc=True)
+        qdrant = Qdrant(client=client,
+                        collection_name=COLLECTION_NAME,
+                        embedding_function=self.embeddings.embed_query)
         knowledge_chain = RetrievalQA.from_llm(
             llm=self.llm,
-            retriever=vector_store.as_retriever(
-                search_kwargs={"k": self.top_k}),
+            retriever=qdrant.as_retriever(search_kwargs={"k": self.top_k}),
             prompt=prompt)
         knowledge_chain.combine_documents_chain.document_prompt = PromptTemplate(
             input_variables=["page_content"], template="{page_content}")
@@ -201,10 +208,10 @@ def init_model():
     try:
         knowladge_based_chat_llm.init_model_config()
         knowladge_based_chat_llm.llm._call("你好")
-        return """初始模型已成功加载，可以开始对话"""
+        return """初始模型已成功加载"""
     except Exception as e:
 
-        return """模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
+        return """模型未成功加载，请检查后重新尝试"""
 
 
 @serving
@@ -213,24 +220,24 @@ def reinit_model(large_language_model: str, embedding_model: str):
         knowladge_based_chat_llm.init_model_config(
             large_language_model=large_language_model,
             embedding_model=embedding_model)
-        model_status = """模型已成功重新加载，可以开始对话"""
+        model_status = """模型已成功重新加载"""
     except Exception as e:
-        model_status = """模型未成功重新加载，请点击重新加载模型"""
+        model_status = """模型未成功加载，请检查后重新尝试"""
     return model_status
 
 
 @serving
-def vector_store(file_path: str or List[str],
-                 vector_store_path: str or os.PathLike = None):
+def vector_store(file_path: str or List[str]):
 
-    vector_store_path, loaded_files = knowladge_based_chat_llm.init_knowledge_vector_store(
-        file_path, vector_store_path=vector_store_path)
-    return vector_store_path
+    vector_store_state, loaded_files = knowladge_based_chat_llm.init_knowledge_vector_store(
+        file_path)
+    return vector_store_state
 
 
 @serving
-def predict(input: str, vector_store_path: str, use_web: bool, top_k: int,
-            history_len: int, temperature: float, top_p: float, history: list):
+def predict(input: str, 
+            use_web: bool, top_k: int, history_len: int, temperature: float,
+            top_p: float, history: list):
     if history == None:
         history = []
 
@@ -241,7 +248,6 @@ def predict(input: str, vector_store_path: str, use_web: bool, top_k: int,
 
     resp = knowladge_based_chat_llm.get_knowledge_based_answer(
         query=input,
-        vector_store_path=vector_store_path,
         web_content=web_content,
         top_k=top_k,
         history_len=history_len,
@@ -252,15 +258,13 @@ def predict(input: str, vector_store_path: str, use_web: bool, top_k: int,
     print(resp['result'])
     return resp['result']
 
-
 if __name__ == "__main__":
-    reinit_model(large_language_model='ChatGLM-6B-int4',
-                 embedding_model='ernie-tiny')
+    reinit_model(large_language_model='ChatGLM-6B-int8',
+                 embedding_model='text2vec-base')
 
-    vector_store(file_path='./README.md', vector_store_path='./vector_store')
+    vector_store(file_path='./README.md')
 
     predict('chatglm-6b的局限性在哪里？',
-            vector_store_path='./vector_store',
             use_web=False,
             top_k=6,
             history_len=3,

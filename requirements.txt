@@ -1,6 +1,7 @@
 langchain==0.0.147
 fschat==0.2.3
 accelerate
+qdrant-client
 duckduckgo_search
 transformers>=4.28.0
 tokenizers
