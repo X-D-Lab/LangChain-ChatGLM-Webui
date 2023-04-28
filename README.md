@@ -6,14 +6,13 @@
   <a href="https://openi.pcl.ac.cn/Learning-Develop-Union/LangChain-ChatGLM-Webui"><img src="https://img.shields.io/badge/-OpenI-337AFF" alt="OpenI"></a>
    <a href="https://www.bilibili.com/video/BV1So4y1L7Hb/?share_source=copy_web&vd_source=8162f92b2a1a94035ca9e4e0f6e1860a"><img src="https://img.shields.io/badge/-bilibili-ff69b4" alt="bilibili"></a> 
 </p> 
-<p align="center">
-<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/thomas-yanxin/LangChain-ChatGLM-Webui?color=brightgreen" /></a>
-<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/graphs/contributors">
-<img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/thomas-yanxin/LangChain-ChatGLM-Webui" />
-</a>
-<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues"><img alt="Issues" src="https://img.shields.io/github/issues/thomas-yanxin/LangChain-ChatGLM-Webui?color=0088ff" /></a>
-<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pulls"><img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/thomas-yanxin/LangChain-ChatGLM-Webui?color=orange" /></a>
+<div align="center">
+
+![stars](https://img.shields.io/github/stars/thomas-yanxin/LangChain-ChatGLM-Webui) ![contributors](https://img.shields.io/github/contributors/thomas-yanxin/LangChain-ChatGLM-Webui) ![issues](http://isitmaintained.com/badge/open/thomas-yanxin/LangChain-ChatGLM-Webui.svg) ![pull requests](https://img.shields.io/github/issues-pr/thomas-yanxin/LangChain-ChatGLM-Webui?color=orange)
+
 </p>
+</div>
+
 <p align="center">  
    <a href="https://www.bilibili.com/video/BV1So4y1L7Hb/?share_source=copy_web&vd_source=8162f92b2a1a94035ca9e4e0f6e1860a"><strong>视频链接</strong></a> | <a href="https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM"><strong>在线体验</strong></a> | <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/blob/master/docs/deploy.md"><strong>部署文档</strong></a>| <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/blob/master/docs/update_history.md"><strong>更新日志</strong></a> | <a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/blob/master/docs/faq.md"><strong>常见问题</strong></a> 
 
