@@ -49,7 +49,7 @@
 
 ## Jina Serving API
 
-1. 启动服务：`lc-serve deploy local jina_serving`
+1. 启动服务：`lc-serve deploy local jina_serving` 
 2. 执行curl初始化模型命令  
 
 ```bash
@@ -93,4 +93,8 @@ curl -X 'POST' \
     "top_p": 0.1, 
     "history": []
   }'
+```
+5. Docker API 服务快速启动
+```
+docker run -d --name LangChain-ChatGLM-Webui --runtime=nvidia --gpus all --network host registry.cn-beijing.aliyuncs.com/public-development-resources/langchain-chatglm-webui:api
 ```
