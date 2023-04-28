@@ -124,8 +124,10 @@
 2. [魔搭ModelScope](https://modelscope.cn/home)提供展示空间
 3. [OpenI启智社区](https://openi.pcl.ac.cn/)提供调试算力
 4. [langchain-serve](https://github.com/jina-ai/langchain-serve)提供十分简易的Serving方式
-
-除此以外, 感谢来自社区的同学们对本项目的关注和支持!
+5. 除此以外, 感谢来自社区的同学们对本项目的关注和支持!
+<a href="https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=thomas-yanxin/LangChain-ChatGLM-Webui" />
+</a>
 
 ## 🌟 Star History
 
