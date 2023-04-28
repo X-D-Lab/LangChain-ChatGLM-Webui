@@ -8,7 +8,7 @@
 </p> 
 <div align="center">
 
-![stars](https://img.shields.io/github/stars/thomas-yanxin/LangChain-ChatGLM-Webui) ![contributors](https://img.shields.io/github/contributors/thomas-yanxin/LangChain-ChatGLM-Webui) ![issues](http://isitmaintained.com/badge/open/thomas-yanxin/LangChain-ChatGLM-Webui.svg) ![pull requests](https://img.shields.io/github/issues-pr/thomas-yanxin/LangChain-ChatGLM-Webui?color=orange)
+![stars](https://img.shields.io/github/stars/thomas-yanxin/LangChain-ChatGLM-Webui) [![contributors](https://img.shields.io/github/contributors/thomas-yanxin/LangChain-ChatGLM-Webui)](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/graphs/contributors) [![issues](http://isitmaintained.com/badge/open/thomas-yanxin/LangChain-ChatGLM-Webui.svg)](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues) [![pull requests](https://img.shields.io/github/issues-pr/thomas-yanxin/LangChain-ChatGLM-Webui?color=orange)](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/pulls)
 
 </p>
 </div>
