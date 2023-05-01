@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "langchain-chatglm-webui"
+version = "0.1.0"
+description = "基于LangChain和ChatGLM-6B等系列LLM的针对本地知识库的自动问答"
+authors = ["thomas-yanxin <yx20001210@163.com>"]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui"
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+langchain = "0.0.147"
+fschat = "0.2.3"
+accelerate = "*"
+qdrant-client = "*"
+duckduckgo_search = "*"
+transformers = ">=4.28.0"
+tokenizers = "*"
+nltk = "*"
+sentence-transformers = "*"
+beautifulsoup4 = "*"
+icetk = "*"
+cpm_kernels = "*"
+faiss-cpu = "*"
+# TODO: uncomment next line when detectron2 support PEP517 and poetry.
+# detectron2 = { git = "https://github.com/facebookresearch/detectron2.git", tag = "v0.6" }
+wandb = "0.13.0"
+jina = { git = "https://github.com/jina-ai/jina.git", branch = "master" } # specify version 3.16.0 when available.
+langchain-serve = "*"
+protobuf = "3.19.0"
+
+[tool.poetry.extras]
+unstructured = ["local-inference"]
+layoutparser = ["layoutmodels", "tesseract"]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
