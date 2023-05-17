@@ -2,16 +2,15 @@ import os
 
 import gradio as gr
 import nltk
-import sentence_transformers
 import torch
 from chatglm_llm import ChatGLM
 from duckduckgo_search import ddg
 from duckduckgo_search.utils import SESSION
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import UnstructuredFileLoader
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import FAISS
+from modelscope_hub import ModelScopeEmbeddings
 
 nltk.data.path.append('../nltk_data')
 
@@ -19,23 +18,24 @@ DEVICE = "cuda" if torch.cuda.is_available(
 ) else "mps" if torch.backends.mps.is_available() else "cpu"
 
 embedding_model_dict = {
-    "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
-    "ernie-base": "nghuyong/ernie-3.0-base-zh",
-    "text2vec-base": "shibing624/text2vec-base-chinese",
+    "corom-tiny": "damo/nlp_corom_sentence-embedding_chinese-tiny",
+    "corom-tiny-ecom": "damo/nlp_corom_sentence-embedding_chinese-tiny-ecom",
+    "corom-base-ecom": "damo/nlp_corom_sentence-embedding_chinese-base-ecom",
+    "corom-base": "damo/nlp_corom_sentence-embedding_chinese-base",
 }
 
 llm_dict = {
     'ChatGLM-6B': {
         'model_name': 'ZhipuAI/ChatGLM-6B',
-        'model_revision': 'v1.0.14',
+        'model_revision': 'v1.0.15',
     },
     'ChatGLM-6B-int8': {
         'model_name': 'thomas/ChatGLM-6B-Int8',
-        'model_revision': 'v1.0.2',
+        'model_revision': 'v1.0.3',
     },
     'ChatGLM-6B-int4': {
         'model_name': 'ZhipuAI/ChatGLM-6B-Int4',
-        'model_revision': 'v1.0.1',
+        'model_revision': 'v1.0.3',
     }
 }
 
@@ -56,10 +56,8 @@ def search_web(query):
 
 def init_knowledge_vector_store(embedding_model, filepath):
 
-    embeddings = HuggingFaceEmbeddings(
+    embeddings = ModelScopeEmbeddings(
         model_name=embedding_model_dict[embedding_model], )
-    embeddings.client = sentence_transformers.SentenceTransformer(
-        embeddings.model_name, device=DEVICE)
 
     loader = UnstructuredFileLoader(filepath, mode="elements")
     docs = loader.load()
@@ -166,7 +164,7 @@ if __name__ == "__main__":
         gr.Markdown("""<h1><center>LangChain-ChatLLM-Webui</center></h1>
         <center><font size=3>
         本项目基于LangChain和大型语言模型系列模型, 提供基于本地知识的自动问答应用. <br>
-        目前项目提供基于<a href='https://github.com/THUDM/ChatGLM-6B' target="_blank">ChatGLM-6B </a>的LLM和包括GanymedeNil/text2vec-large-chinese、nghuyong/ernie-3.0-base-zh、nghuyong/ernie-3.0-nano-zh在内的多个Embedding模型, 支持上传 txt、docx、md 等文本格式文件. <br>
+        目前项目提供基于<a href='https://github.com/THUDM/ChatGLM-6B' target="_blank">ChatGLM-6B </a>的LLM和包括nlp_corom_sentence-embedding系列的多个Embedding模型, 支持上传 txt、docx、md 等文本格式文件. <br>
         后续将提供更加多样化的LLM、Embedding和参数选项供用户尝试, 欢迎关注<a href='https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui' target="_blank">Github地址</a>.
         </center></font>
         """)
@@ -179,10 +177,10 @@ if __name__ == "__main__":
                         label="large language model",
                         value="ChatGLM-6B-int8")
 
-                    embedding_model = gr.Dropdown(
-                        ["ernie-tiny", "ernie-base", "text2vec-base"],
+                    embedding_model = gr.Dropdown(list(
+                        embedding_model_dict.keys()),
                         label="Embedding model",
-                        value="ernie-tiny")
+                        value="corom-tiny")
 
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx'])
