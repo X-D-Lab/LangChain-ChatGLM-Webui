@@ -27,15 +27,10 @@ class ChatLLM(LLM):
     def _call(self,
               prompt: str,
               stop: Optional[List[str]] = None) -> str:
-        print(prompt)
         prompt_list = []
         prompt_list.append(prompt)
-        print(prompt_list)
-
         results = chatbot(prompt_list)
-
         response = results['result'][0]
-        print(response)
         if stop is not None:
             response = enforce_stop_tokens(response, stop)
         return response

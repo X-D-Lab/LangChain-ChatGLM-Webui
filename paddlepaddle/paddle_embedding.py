@@ -1,7 +1,6 @@
 """Wrapper around PaddleNLP embedding models."""
 from typing import Any, List
 
-import paddle
 from langchain.embeddings.base import Embeddings
 from pydantic import BaseModel, Extra
 

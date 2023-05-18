@@ -11,7 +11,7 @@ from paddle_embedding import PaddleNLPEmbeddings
 
 from chatllm import ChatLLM
 
-nltk.data.path.append('./nltk_data')
+nltk.data.path.append('../nltk_data')
 llm_model_dict = {
     'ChatGLM-6B': 'THUDM/chatglm-6b'
 }
