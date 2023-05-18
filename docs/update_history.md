@@ -1,5 +1,9 @@
 # 更新日志
 
+## May 19 2023
+
+1. 提供PaddlePaddle版本和AIStudio环境
+
 ## Apr 28 2023
 
 1. 增加推荐Embedding Model
