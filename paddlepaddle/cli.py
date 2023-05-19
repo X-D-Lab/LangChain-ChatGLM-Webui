@@ -101,6 +101,10 @@ if __name__ == "__main__":
     vector_store = init_knowledge_vector_store(
         'rocketqa-zh-dureader', '/home/aistudio/docs/README-ChatGLM.md')
 
+# for i, (old_query, response) in enumerate(history):
+#                 prompt += "[Round {}]\n问：{}\n答：{}\n".format(i, old_query, response)
+#             prompt += "[Round {}]\n问：{}\n答：".format(len(history), query)
+
     while True:
         query = input('提问: ')
         resp = get_knowledge_based_answer(query=query,
@@ -110,4 +114,6 @@ if __name__ == "__main__":
                                           chat_history=[])
 
         print("回答: " + resp)
+
+    
 
