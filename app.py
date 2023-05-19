@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 import gradio as gr
 import nltk
@@ -16,7 +17,8 @@ from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
 from config import *
 
-nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")] + nltk.data.path
+nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")
+                  ] + nltk.data.path
 
 embedding_model_dict = embedding_model_dict
 llm_model_dict = llm_model_dict
@@ -28,6 +30,7 @@ init_embedding_model = init_embedding_model
 
 llm_model_list = []
 llm_model_dict = llm_model_dict
+
 for i in llm_model_dict:
     for j in llm_model_dict[i]:
         llm_model_list.append(j)
@@ -85,11 +88,11 @@ class KnowledgeBasedChatLLM:
         docs = self.load_file(filepath)
 
         vector_store = FAISS.from_documents(docs, self.embeddings)
+        vector_store.save_local('faiss_index')
         return vector_store
 
     def get_knowledge_based_answer(self,
                                    query,
-                                   vector_store,
                                    web_content,
                                    top_k: int = 6,
                                    history_len: int = 3,
@@ -121,6 +124,7 @@ class KnowledgeBasedChatLLM:
                                 input_variables=["context", "question"])
         self.llm.history = history[
             -self.history_len:] if self.history_len > 0 else []
+        vector_store = FAISS.load_local('faiss_index', self.embeddings)
 
         knowledge_chain = RetrievalQA.from_llm(
             llm=self.llm,
@@ -185,8 +189,15 @@ def reinit_model(large_language_model, embedding_model, history):
     return history + [[None, model_status]]
 
 
+def init_vector_store(file_obj):
+
+    vector_store = knowladge_based_chat_llm.init_knowledge_vector_store(
+        file_obj.name)
+
+    return vector_store
+
+
 def predict(input,
-            file_obj,
             use_web,
             top_k,
             history_len,
@@ -195,9 +206,7 @@ def predict(input,
             history=None):
     if history == None:
         history = []
-    print(file_obj.name)
-    vector_store = knowladge_based_chat_llm.init_knowledge_vector_store(
-        file_obj.name)
+
     if use_web == 'True':
         web_content = search_web(query=input)
     else:
@@ -205,7 +214,6 @@ def predict(input,
 
     resp = knowladge_based_chat_llm.get_knowledge_based_answer(
         query=input,
-        vector_store=vector_store,
         web_content=web_content,
         top_k=top_k,
         history_len=history_len,
@@ -277,6 +285,8 @@ if __name__ == "__main__":
                 file = gr.File(label='请上传知识库文件',
                                file_types=['.txt', '.md', '.docx', '.pdf'])
 
+                init_vs = gr.Button("知识库文件向量化")
+
                 use_web = gr.Radio(["True", "False"],
                                    label="Web Search",
                                    value="False")
@@ -297,11 +307,17 @@ if __name__ == "__main__":
                 inputs=[large_language_model, embedding_model, chatbot],
                 outputs=chatbot,
             )
+            init_vs.click(
+                init_vector_store,
+                show_progress=True,
+                inputs=[file],
+                outputs=[],
+            )
 
             send.click(predict,
                        inputs=[
-                           message, file, use_web, top_k, history_len,
-                           temperature, top_p, state
+                           message, use_web, top_k, history_len, temperature,
+                           top_p, state
                        ],
                        outputs=[message, chatbot, state])
             clear_history.click(fn=clear_session,
@@ -311,7 +327,7 @@ if __name__ == "__main__":
 
             message.submit(predict,
                            inputs=[
-                               message, file, use_web, top_k, history_len,
+                               message, use_web, top_k, history_len,
                                temperature, top_p, state
                            ],
                            outputs=[message, chatbot, state])

@@ -1,5 +1,9 @@
 # 更新日志
 
+## May 20 2023
+
+1. vsctor store 本地存储
+
 ## May 19 2023
 
 1. 提供PaddlePaddle版本和AIStudio环境
