@@ -12,7 +12,7 @@
 
 另: 若您想要安装测试ModelScope版本, 需要额外安装ModelScope包: `pip install modelscope==1.4.3 -f https://modelscope.oss-cn-beijing.aliyuncs.com/releases/repo.html `
 
-[OpenI启智社区](https://openi.pcl.ac.cn/Learning-Develop-Union/LangChain-ChatGLM-Webui)部署推荐的Docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain_ChatLLM`
+[OpenI启智社区](https://openi.pcl.ac.cn/Learning-Develop-Union/LangChain-ChatGLM-Webui)部署推荐的Docker镜像: `dockerhub.pcl.ac.cn:5000/user-images/openi:LangChain-ChatLLM-2.0`
 
 ### 启动程序
 
