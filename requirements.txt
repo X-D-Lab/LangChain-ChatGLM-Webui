@@ -1,8 +1,8 @@
 langchain==0.0.147
 fschat==0.2.3
 accelerate
-qdrant-client
-duckduckgo_search==2.9.5
+qdrant-client   # API版本需要
+duckduckgo_search==2.9.5    
 transformers>=4.28.0
 tokenizers
 unstructured[local-inference]
@@ -13,8 +13,8 @@ beautifulsoup4
 icetk
 cpm_kernels
 faiss-cpu
-detectron2@git+https://github.com/facebookresearch/detectron2.git@v0.6#egg=detectron2
+detectron2@git+https://github.com/facebookresearch/detectron2.git@v0.6#egg=detectron2   # PDF需要
 wandb==0.13.0
-jina
-langchain-serve
+jina    # API版本需要
+langchain-serve # API版本需要
 protobuf==3.19.0
