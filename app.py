@@ -8,6 +8,7 @@ from duckduckgo_search import ddg
 from duckduckgo_search.utils import SESSION
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import UnstructuredFileLoader
+from langchain.document_loaders import UnstructuredPowerPointLoader
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.prompts.prompt import PromptTemplate
@@ -37,7 +38,6 @@ for i in llm_model_dict:
 
 
 def search_web(query):
-
     SESSION.proxies = {
         "http": f"socks5h://localhost:7890",
         "https": f"socks5h://localhost:7890"
@@ -51,14 +51,13 @@ def search_web(query):
 
 
 class KnowledgeBasedChatLLM:
-
     llm: object = None
     embeddings: object = None
 
     def init_model_config(
-        self,
-        large_language_model: str = init_llm,
-        embedding_model: str = init_embedding_model,
+            self,
+            large_language_model: str = init_llm,
+            embedding_model: str = init_embedding_model,
     ):
 
         self.embeddings = HuggingFaceEmbeddings(
@@ -83,10 +82,10 @@ class KnowledgeBasedChatLLM:
                 large_language_model]
         self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
 
-    def init_knowledge_vector_store(self, filepath):
-
-        docs = self.load_file(filepath)
-
+    def init_knowledge_vector_store(self, files):
+        docs = []
+        for file in files:
+            docs += self.load_file(file)
         vector_store = FAISS.from_documents(docs, self.embeddings)
         vector_store.save_local('faiss_index')
         return vector_store
@@ -123,7 +122,7 @@ class KnowledgeBasedChatLLM:
         prompt = PromptTemplate(template=prompt_template,
                                 input_variables=["context", "question"])
         self.llm.history = history[
-            -self.history_len:] if self.history_len > 0 else []
+                           -self.history_len:] if self.history_len > 0 else []
         vector_store = FAISS.load_local('faiss_index', self.embeddings)
 
         knowledge_chain = RetrievalQA.from_llm(
@@ -147,6 +146,9 @@ class KnowledgeBasedChatLLM:
             loader = UnstructuredFileLoader(filepath)
             textsplitter = ChineseTextSplitter(pdf=True)
             docs = loader.load_and_split(textsplitter)
+        elif filepath.lower().endswith(".pptx"):
+            loader = UnstructuredPowerPointLoader(filepath)
+            docs = loader.load()
         else:
             loader = UnstructuredFileLoader(filepath, mode="elements")
             textsplitter = ChineseTextSplitter(pdf=False)
@@ -190,10 +192,11 @@ def reinit_model(large_language_model, embedding_model, history):
 
 
 def init_vector_store(file_obj):
-
+    files = []
+    for file in file_obj:
+        files.append(file.name)
     vector_store = knowladge_based_chat_llm.init_knowledge_vector_store(
-        file_obj.name)
-
+        files)
     return vector_store
 
 
@@ -229,7 +232,6 @@ model_status = init_model()
 if __name__ == "__main__":
     block = gr.Blocks()
     with block as demo:
-
         gr.Markdown("""<h1><center>LangChain-ChatLLM-Webui</center></h1>
         <center><font size=3>
         本项目基于LangChain和大型语言模型系列模型, 提供基于本地知识的自动问答应用. <br>
@@ -249,12 +251,11 @@ if __name__ == "__main__":
 
                     embedding_model = gr.Dropdown(list(
                         embedding_model_dict.keys()),
-                                                  label="Embedding model",
-                                                  value=init_embedding_model)
+                        label="Embedding model",
+                        value=init_embedding_model)
                     load_model_button = gr.Button("重新加载模型")
                 model_argument = gr.Accordion("模型参数配置")
                 with model_argument:
-
                     top_k = gr.Slider(1,
                                       10,
                                       value=6,
@@ -283,7 +284,8 @@ if __name__ == "__main__":
                                       interactive=True)
 
                 file = gr.File(label='请上传知识库文件',
-                               file_types=['.txt', '.md', '.docx', '.pdf'])
+                               file_types=['.txt', '.md', '.docx', '.pdf'],
+                               file_count="multiple")
 
                 init_vs = gr.Button("知识库文件向量化")
 
@@ -337,8 +339,9 @@ if __name__ == "__main__":
         """)
     # threads to consume the request
     demo.queue(concurrency_count=3) \
-        .launch(server_name='0.0.0.0', # ip for listening, 0.0.0.0 for every inbound traffic, 127.0.0.1 for local inbound
-                server_port=7860, # the port for listening
-                show_api=False, # if display the api document
-                share=False, # if register a public url
-                inbrowser=False) # if browser would be open automatically
+        .launch(server_name='0.0.0.0',
+                # ip for listening, 0.0.0.0 for every inbound traffic, 127.0.0.1 for local inbound
+                server_port=7860,  # the port for listening
+                show_api=False,  # if display the api document
+                share=False,  # if register a public url
+                inbrowser=False)  # if browser would be open automatically
