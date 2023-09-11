@@ -62,7 +62,9 @@
 | Vicuna-13b-1.1 | paraphrase-multilingual-MiniLM-L12-v2 | 
 | BELLE-LLaMA-7B-2M |  | 
 | BELLE-LLaMA-13B-2M | | 
-| Minimax | |
+| internlm-chat-7b-8k | | 
+| internlm-chat-7b-v1_1 | | 
+| internlm-chat-7b | | 
 
 ## 💪 更新日志
 
