@@ -112,6 +112,8 @@ class ChatLLM(LLM):
             if stop is not None:
                 response = enforce_stop_tokens(response, stop)
             self.history = self.history + [[None, response]]
+        elif self.model_type == 'internlm':
+            response, _ = self.model.chat(self.tokenizer, prompt, history=self.history, max_length=self.max_token, temperature=self.temperature)
 
         return response
 
@@ -147,6 +149,12 @@ class ChatLLM(LLM):
                     self.model_name_or_path,
                     trust_remote_code=True, cache_dir=os.path.join(MODEL_CACHE_PATH, self.model_name_or_path)).float().to(llm_device))
             self.model = self.model.eval()
+        elif 'internlm' in self.model_name_or_path.lower():
+            
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name_or_path, trust_remote_code=True)
+            self.model = AutoModelForCausalLM.from_pretrained(self.model_name_or_path, trust_remote_code=True).cuda()
+            self.model = self.model.eval()
+
 
         else:     
             self.model, self.tokenizer = load_fastchat_model(

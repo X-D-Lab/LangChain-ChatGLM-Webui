@@ -46,5 +46,10 @@ llm_model_dict = {
     },
     "vicuna": {
         "Vicuna-Local": "/pretrainmodel/vicuna",
+    },
+    "internlm": {
+        "internlm-chat-7b-8k": "internlm/internlm-chat-7b-8k",
+        "internlm-chat-7b": "internlm/internlm-chat-7b",
+        "internlm-chat-7b-v1_1": "internlm/internlm-chat-7b-v1_1",
     }
 }

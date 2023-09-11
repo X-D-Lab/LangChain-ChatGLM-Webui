@@ -81,6 +81,10 @@ class KnowledgeBasedChatLLM:
             self.llm.model_type = 'vicuna'
             self.llm.model_name_or_path = llm_model_dict['vicuna'][
                 large_language_model]
+        elif 'internlm' in large_language_model.lower():
+            self.llm.model_type = 'internlm'
+            self.llm.model_name_or_path = llm_model_dict['internlm'][
+                large_language_model]
         self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
 
     def init_knowledge_vector_store(self, filepath):
