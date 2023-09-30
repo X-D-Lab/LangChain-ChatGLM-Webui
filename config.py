@@ -19,7 +19,7 @@ COLLECTION_NAME='my_collection'
 
 
 # init model config
-init_llm = "ChatGLM-6B-int8"
+init_llm = "ChatGLM2-6B"
 init_embedding_model = "text2vec-base"
 
 # model config
@@ -35,12 +35,15 @@ embedding_model_dict = {
 
 
 llm_model_dict = {
+    "chatglm2": {
+        "ChatGLM2-6B": "THUDM/chatglm2-6b",
+        "ChatGLM2-6B-int4": "THUDM/chatglm2-6b-int4",
+    },
     "chatglm": {
         "ChatGLM-6B": "THUDM/chatglm-6b",
         "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
         "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
-        "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
-        "ChatGLM2-6B": "THUDM/chatglm2-6b",
+        "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe"
     },
     "belle": {
         "BELLE-LLaMA-Local": "/pretrainmodel/belle",
