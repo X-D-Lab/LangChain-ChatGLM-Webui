@@ -69,7 +69,11 @@ class KnowledgeBasedChatLLM:
             cache_folder=os.path.join(MODEL_CACHE_PATH,
                                       self.embeddings.model_name))
         self.llm = ChatLLM()
-        if 'chatglm' in large_language_model.lower():
+        if 'chatglm2' in large_language_model.lower():
+            self.llm.model_type = 'chatglm2'
+            self.llm.model_name_or_path = llm_model_dict['chatglm2'][
+                large_language_model]
+        elif 'chatglm' in large_language_model.lower():
             self.llm.model_type = 'chatglm'
             self.llm.model_name_or_path = llm_model_dict['chatglm'][
                 large_language_model]
