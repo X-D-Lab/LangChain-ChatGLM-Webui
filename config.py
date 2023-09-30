@@ -39,7 +39,8 @@ llm_model_dict = {
         "ChatGLM-6B": "THUDM/chatglm-6b",
         "ChatGLM-6B-int4": "THUDM/chatglm-6b-int4",
         "ChatGLM-6B-int8": "THUDM/chatglm-6b-int8",
-        "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe"
+        "ChatGLM-6b-int4-qe": "THUDM/chatglm-6b-int4-qe",
+        "ChatGLM2-6B": "THUDM/chatglm2-6b",
     },
     "belle": {
         "BELLE-LLaMA-Local": "/pretrainmodel/belle",
