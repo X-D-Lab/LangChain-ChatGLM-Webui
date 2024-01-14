@@ -180,7 +180,7 @@ def init_model():
     except Exception as e:
         print(f"加载模型出错: {e}")  # 打印详细的异常信息
         return """模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
-    
+
 def clear_session():
     return '', None
 
