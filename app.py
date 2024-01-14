@@ -170,17 +170,17 @@ def update_status(history, status):
 
 knowladge_based_chat_llm = KnowledgeBasedChatLLM()
 
-
 def init_model():
     try:
+        print("开始加载模型配置")
         knowladge_based_chat_llm.init_model_config()
+        print("模型配置加载成功")
         knowladge_based_chat_llm.llm._call("你好")
         return """初始模型已成功加载，可以开始对话"""
     except Exception as e:
-
-        return """模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
-
-
+        print(f"加载模型出错: {e}")  # 打印详细的异常信息
+        return """2222模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
+    
 def clear_session():
     return '', None
 
