@@ -179,7 +179,7 @@ def init_model():
         return """初始模型已成功加载，可以开始对话"""
     except Exception as e:
         print(f"加载模型出错: {e}")  # 打印详细的异常信息
-        return """2222模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
+        return """模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
     
 def clear_session():
     return '', None
