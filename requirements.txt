@@ -1,9 +1,9 @@
-langchain==0.0.147
+langchain==0.1.0
 fschat==0.2.3
 accelerate
 qdrant-client   # API版本需要
 duckduckgo_search==2.9.5    
-transformers>=4.28.0
+transformers==4.30.2
 tokenizers
 unstructured[local-inference]
 layoutparser[layoutmodels,tesseract]
@@ -14,7 +14,7 @@ icetk
 cpm_kernels
 faiss-cpu
 detectron2@git+https://github.com/facebookresearch/detectron2.git@v0.6#egg=detectron2   # PDF需要
-wandb==0.13.0
+wandb==0.16.2
 jina    # API版本需要
 langchain-serve # API版本需要
-protobuf==3.19.0
+protobuf==4.25.2
