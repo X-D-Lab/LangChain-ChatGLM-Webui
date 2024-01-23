@@ -7,11 +7,11 @@ import sentence_transformers
 from duckduckgo_search import ddg
 from duckduckgo_search.utils import SESSION
 from langchain.chains import RetrievalQA
-from langchain.document_loaders import UnstructuredFileLoader
+from langchain_community.document_loaders import UnstructuredFileLoader
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.prompts.prompt import PromptTemplate
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 
 from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
