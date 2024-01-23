@@ -18,3 +18,4 @@ wandb==0.16.2
 jina    # API版本需要
 langchain-serve # API版本需要
 protobuf==4.25.2
+langchain-community
