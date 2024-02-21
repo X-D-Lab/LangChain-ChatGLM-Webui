@@ -16,6 +16,7 @@ from langchain_community.vectorstores import FAISS
 from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
 from config import *
+import torch
 
 nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")
                   ] + nltk.data.path
@@ -69,6 +70,8 @@ class KnowledgeBasedChatLLM:
             cache_folder=os.path.join(MODEL_CACHE_PATH, self.embeddings.model_name),
             trust_remote_code=True
         )
+        self.llm = None
+        torch.cuda.empty_cache()
         self.llm = ChatLLM()
         if 'chatglm2' in large_language_model.lower():
             self.llm.model_type = 'chatglm2'
@@ -178,11 +181,13 @@ knowladge_based_chat_llm = KnowledgeBasedChatLLM()
 
 def init_model():
     try:
+        print("开始加载模型配置")
         knowladge_based_chat_llm.init_model_config()
+        print("模型配置加载成功")
         knowladge_based_chat_llm.llm._call("你好")
         return """初始模型已成功加载，可以开始对话"""
     except Exception as e:
-
+        print(f"加载模型出错: {e}")  # 打印详细的异常信息
         return """模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
 
 
