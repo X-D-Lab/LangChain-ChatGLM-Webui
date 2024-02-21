@@ -155,6 +155,10 @@ class KnowledgeBasedChatLLM:
             loader = UnstructuredFileLoader(filepath)
             textsplitter = ChineseTextSplitter(pdf=True)
             docs = loader.load_and_split(textsplitter)
+         elif filepath.lower().endswith(".txt"):
+            loader = UnstructuredFileLoader(filepath,encoding='utf8') 
+            textsplitter = ChineseTextSplitter(pdf=False)
+            docs = loader.load_and_split(textsplitter)
         else:
             loader = UnstructuredFileLoader(filepath, mode="elements")
             textsplitter = ChineseTextSplitter(pdf=False)
