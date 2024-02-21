@@ -30,7 +30,9 @@ embedding_model_dict = {
     "ernie-xbase": "nghuyong/ernie-3.0-xbase-zh",
     "text2vec-base": "GanymedeNil/text2vec-base-chinese",
     'simbert-base-chinese': 'WangZeJun/simbert-base-chinese',
-    'paraphrase-multilingual-MiniLM-L12-v2': "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    'paraphrase-multilingual-MiniLM-L12-v2': "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "jina-embeddings-v2-base-zh": "jinaai/jina-embeddings-v2-base-zh",
+    "bge-m3":"BAAI/bge-m3 "
 }
 
 
