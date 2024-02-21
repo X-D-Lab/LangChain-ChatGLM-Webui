@@ -7,11 +7,11 @@ import sentence_transformers
 from duckduckgo_search import ddg
 from duckduckgo_search.utils import SESSION
 from langchain.chains import RetrievalQA
-from langchain.document_loaders import UnstructuredFileLoader
+from langchain_community.document_loaders import UnstructuredFileLoader
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.prompts.prompt import PromptTemplate
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 
 from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
@@ -66,8 +66,9 @@ class KnowledgeBasedChatLLM:
         self.embeddings.client = sentence_transformers.SentenceTransformer(
             self.embeddings.model_name,
             device=EMBEDDING_DEVICE,
-            cache_folder=os.path.join(MODEL_CACHE_PATH,
-                                      self.embeddings.model_name))
+            cache_folder=os.path.join(MODEL_CACHE_PATH, self.embeddings.model_name),
+            trust_remote_code=True
+        )
         self.llm = ChatLLM()
         if 'chatglm2' in large_language_model.lower():
             self.llm.model_type = 'chatglm2'
