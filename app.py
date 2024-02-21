@@ -16,6 +16,7 @@ from langchain_community.vectorstores import FAISS
 from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
 from config import *
+import torch
 
 nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")
                   ] + nltk.data.path
@@ -69,6 +70,8 @@ class KnowledgeBasedChatLLM:
             cache_folder=os.path.join(MODEL_CACHE_PATH, self.embeddings.model_name),
             trust_remote_code=True
         )
+        self.llm = None
+        torch.cuda.empty_cache()
         self.llm = ChatLLM()
         if 'chatglm2' in large_language_model.lower():
             self.llm.model_type = 'chatglm2'
