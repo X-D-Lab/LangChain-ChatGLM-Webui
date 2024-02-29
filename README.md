@@ -21,6 +21,12 @@
 
 </p>
 
+<div align="center">
+
+👋 **联系我们**: xd.lab2023@gmail.com
+
+</div>
+
 ## 🔥 项目体验
 
 本项目提供基于[HuggingFace社区](https://huggingface.co/spaces/thomas-yanxin/LangChain-ChatLLM)、[OpenXLab](https://openxlab.org.cn/apps/detail/thomas-yanxin/LangChain-ChatLLM)、[ModelScope魔搭社区](https://modelscope.cn/studios/AI-ModelScope/LangChain-ChatLLM/summary)、[飞桨AIStudio社区](https://aistudio.baidu.com/aistudio/projectdetail/6195067)的在线体验, 欢迎尝试和反馈!  
