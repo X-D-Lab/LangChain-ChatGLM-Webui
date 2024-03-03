@@ -93,6 +93,10 @@ class KnowledgeBasedChatLLM:
             self.llm.model_type = 'internlm'
             self.llm.model_name_or_path = llm_model_dict['internlm'][
                 large_language_model]
+        elif 'yuan2' in large_language_model.lower():
+            self.llm.model_type = 'yuan2'
+            self.llm.model_name_or_path = llm_model_dict['yuan2'][large_language_model] 
+             
         self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
 
     def init_knowledge_vector_store(self, filepath):
@@ -159,7 +163,7 @@ class KnowledgeBasedChatLLM:
             loader = UnstructuredFileLoader(filepath)
             textsplitter = ChineseTextSplitter(pdf=True)
             docs = loader.load_and_split(textsplitter)
-         elif filepath.lower().endswith(".txt"):
+        elif filepath.lower().endswith(".txt"):
             loader = UnstructuredFileLoader(filepath,encoding='utf8') 
             textsplitter = ChineseTextSplitter(pdf=False)
             docs = loader.load_and_split(textsplitter)
