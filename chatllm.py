@@ -128,6 +128,17 @@ class ChatLLM(LLM):
             self.history = self.history + [[None, response]]
         elif self.model_type == 'internlm':
             response, _ = self.model.chat(self.tokenizer, prompt, history=self.history, max_length=self.max_token, temperature=self.temperature)
+          
+        elif self.model_type == 'yuan2':
+            inputs = self.tokenizer(prompt, return_tensors="pt").to(DEVICE)
+            outputs = self.model.generate(inputs.input_ids, max_length=self.max_token, do_sample=True,
+                                          temperature=self.temperature)
+            output = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+            response = output[len(prompt)+1:]
+            torch_gc()
+            if stop is not None:
+                response = enforce_stop_tokens(response, stop)
+            self.history = self.history + [[None, response]]
 
         return response
 
@@ -197,6 +208,11 @@ class ChatLLM(LLM):
             self.model = AutoModelForCausalLM.from_pretrained(self.model_name_or_path, trust_remote_code=True).cuda()
             self.model = self.model.eval()
 
+        elif 'yuan2' in self.model_name_or_path.lower():
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name_or_path, trust_remote_code=True)
+            self.model = AutoModelForCausalLM.from_pretrained(self.model_name_or_path, device_map='auto',
+                                                                  torch_dtype=torch.bfloat16, trust_remote_code=True)
+            self.model = self.model.eval()
 
         else:     
             self.model, self.tokenizer = load_fastchat_model(

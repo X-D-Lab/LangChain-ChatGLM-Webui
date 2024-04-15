@@ -58,4 +58,7 @@ llm_model_dict = {
         "internlm-chat-7b": "internlm/internlm-chat-7b",
         "internlm-chat-7b-v1_1": "internlm/internlm-chat-7b-v1_1",
     }
+    "yuan2":{
+        "Yuan2-2B-hf":"IEITYuan/Yuan2-2B-hf"
+    }
 }
