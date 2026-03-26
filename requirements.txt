@@ -20,3 +20,4 @@ langchain-serve # API版本需要
 protobuf==4.25.2
 langchain-community
 einops
+openai>=1.0.0    # MiniMax Cloud LLM (OpenAI-compatible API)

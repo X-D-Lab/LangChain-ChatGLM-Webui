@@ -57,14 +57,18 @@
 | ChatGLM-6B | text2vec-large-chinese |
 | ChatGLM-6B-int8 | ernie-3.0-base-zh |
 | ChatGLM-6B-int4 | ernie-3.0-nano-zh |
-| ChatGLM-6B-int4-qe | ernie-3.0-xbase-zh | 
-| Vicuna-7b-1.1 | simbert-base-chinese | 
-| Vicuna-13b-1.1 | paraphrase-multilingual-MiniLM-L12-v2 | 
-| BELLE-LLaMA-7B-2M |  | 
-| BELLE-LLaMA-13B-2M | | 
-| internlm-chat-7b-8k | | 
-| internlm-chat-7b-v1_1 | | 
-| internlm-chat-7b | | 
+| ChatGLM-6B-int4-qe | ernie-3.0-xbase-zh |
+| Vicuna-7b-1.1 | simbert-base-chinese |
+| Vicuna-13b-1.1 | paraphrase-multilingual-MiniLM-L12-v2 |
+| BELLE-LLaMA-7B-2M |  |
+| BELLE-LLaMA-13B-2M | |
+| internlm-chat-7b-8k | |
+| internlm-chat-7b-v1_1 | |
+| internlm-chat-7b | |
+| [MiniMax-M2.7](https://platform.minimaxi.com/) (Cloud API) | |
+| [MiniMax-M2.7-highspeed](https://platform.minimaxi.com/) (Cloud API) | |
+
+> **MiniMax Cloud LLM**: 除本地模型外，项目还支持通过 [MiniMax](https://platform.minimaxi.com/) 云端API调用大语言模型，无需GPU即可使用。设置环境变量 `MINIMAX_API_KEY` 后，在模型选择下拉框中选择 MiniMax-M2.7 或 MiniMax-M2.7-highspeed 即可。
 
 ## 💪 更新日志
 

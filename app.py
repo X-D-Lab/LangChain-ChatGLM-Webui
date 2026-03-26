@@ -72,32 +72,36 @@ class KnowledgeBasedChatLLM:
         )
         self.llm = None
         torch.cuda.empty_cache()
-        self.llm = ChatLLM()
-        if 'chatglm2' in large_language_model.lower():
-            self.llm.model_type = 'chatglm2'
-            self.llm.model_name_or_path = llm_model_dict['chatglm2'][
-                large_language_model]
-        elif 'chatglm' in large_language_model.lower():
-            self.llm.model_type = 'chatglm'
-            self.llm.model_name_or_path = llm_model_dict['chatglm'][
-                large_language_model]
-        elif 'belle' in large_language_model.lower():
-            self.llm.model_type = 'belle'
-            self.llm.model_name_or_path = llm_model_dict['belle'][
-                large_language_model]
-        elif 'vicuna' in large_language_model.lower():
-            self.llm.model_type = 'vicuna'
-            self.llm.model_name_or_path = llm_model_dict['vicuna'][
-                large_language_model]
-        elif 'internlm' in large_language_model.lower():
-            self.llm.model_type = 'internlm'
-            self.llm.model_name_or_path = llm_model_dict['internlm'][
-                large_language_model]
-        elif 'yuan2' in large_language_model.lower():
-            self.llm.model_type = 'yuan2'
-            self.llm.model_name_or_path = llm_model_dict['yuan2'][large_language_model] 
-             
-        self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
+        if 'minimax' in large_language_model.lower():
+            from minimax_llm import ChatMiniMaxLLM
+            self.llm = ChatMiniMaxLLM(
+                model_name=llm_model_dict['minimax'][large_language_model])
+        else:
+            self.llm = ChatLLM()
+            if 'chatglm2' in large_language_model.lower():
+                self.llm.model_type = 'chatglm2'
+                self.llm.model_name_or_path = llm_model_dict['chatglm2'][
+                    large_language_model]
+            elif 'chatglm' in large_language_model.lower():
+                self.llm.model_type = 'chatglm'
+                self.llm.model_name_or_path = llm_model_dict['chatglm'][
+                    large_language_model]
+            elif 'belle' in large_language_model.lower():
+                self.llm.model_type = 'belle'
+                self.llm.model_name_or_path = llm_model_dict['belle'][
+                    large_language_model]
+            elif 'vicuna' in large_language_model.lower():
+                self.llm.model_type = 'vicuna'
+                self.llm.model_name_or_path = llm_model_dict['vicuna'][
+                    large_language_model]
+            elif 'internlm' in large_language_model.lower():
+                self.llm.model_type = 'internlm'
+                self.llm.model_name_or_path = llm_model_dict['internlm'][
+                    large_language_model]
+            elif 'yuan2' in large_language_model.lower():
+                self.llm.model_type = 'yuan2'
+                self.llm.model_name_or_path = llm_model_dict['yuan2'][large_language_model]
+            self.llm.load_llm(llm_device=LLM_DEVICE, num_gpus=num_gpus)
 
     def init_knowledge_vector_store(self, filepath):
 
