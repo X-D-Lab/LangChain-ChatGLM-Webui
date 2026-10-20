@@ -1,0 +1,8 @@
+# Lightweight search-callback validation; no model weights or GPU packages.
+langchain==0.1.0
+gradio==3.50.2
+duckduckgo_search==2.9.5
+huggingface_hub<1.0
+nltk
+# Gradio 3 uses distutils, removed from Python 3.12's standard library.
+setuptools; python_version >= "3.12"
