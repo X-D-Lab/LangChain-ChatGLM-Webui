@@ -11,6 +11,7 @@ import io
 import json
 import runpy
 import sys
+import threading
 import types
 import unittest
 from concurrent.futures import ThreadPoolExecutor
@@ -179,7 +180,7 @@ class CallerTests(unittest.TestCase):
             for provider in ("DuckDuckGo", "Parallel", "invalid"):
                 context = {}
                 self.predict(context, provider=provider, enabled="False")
-                self.assertEqual(context, {})
+                self.assertEqual(str(UUID(context["session_id"])), context["session_id"])
             self.assertEqual(ddg.call_count, 2)
             opener.assert_not_called()
 
@@ -298,10 +299,64 @@ class CallerTests(unittest.TestCase):
             self.assertNotEqual(first_id, second[context_id]["session_id"])
             asyncio.run(send(callbacks[1], first))
             self.assertEqual(first_id, first[context_id]["session_id"])
-            asyncio.run(demo.process_api(clear, [], state=first))
+            asyncio.run(demo.process_api(clear, [None], state=first))
             self.assertEqual(first[context_id], {})
             asyncio.run(send(callbacks[0], first))
             self.assertNotEqual(first_id, first[context_id]["session_id"])
+
+    def test_reset_during_search_does_not_restore_old_chat(self):
+        from gradio.state_holder import SessionState
+
+        with patch.dict(sys.modules, model_modules), \
+                patch.object(app.gr.Blocks, "launch", return_value=None):
+            namespace = runpy.run_path(app.__file__, run_name="__main__")
+        demo = namespace["demo"]
+        self.addCleanup(demo.close)
+        namespace["predict"].__globals__["knowladge_based_chat_llm"] = self.knowledge
+        state = SessionState(demo)
+        context_id = namespace["search_context"]._id
+        history_id = namespace["state"]._id
+        send = next(i for i, fn in enumerate(demo.fns) if fn.fn.__name__ == "predict")
+        clear = next(i for i, fn in enumerate(demo.fns) if fn.fn.__name__ == "clear_session")
+        started, release = threading.Event(), threading.Event()
+
+        class BlockingServer(MCPServer):
+            def open(self, request, timeout):
+                if json.loads(request.data)["method"] == "tools/call" and not started.is_set():
+                    started.set()
+                    if not release.wait(timeout=5):
+                        raise AssertionError("Test did not release the old search")
+                return super().open(request, timeout)
+
+        server = BlockingServer()
+
+        async def run():
+            def send_question(query):
+                return demo.process_api(send, [query, "True", 6, 3, 0.01, 0.1,
+                                               None, "Parallel", None], state=state)
+
+            old = asyncio.create_task(send_question("Old question"))
+            try:
+                self.assertTrue(await asyncio.to_thread(started.wait, 5))
+                old_id = state[context_id]["session_id"]
+                await demo.process_api(clear, [None], state=state)
+                self.assertEqual(state[context_id], {})
+                self.assertIsNone(state[history_id])
+                await send_question("New chat question")
+                new_id = state[context_id]["session_id"]
+                self.assertNotEqual(old_id, new_id)
+                release.set()
+                response = await old
+                self.assertEqual(response["data"][0], {"__type__": "update"})
+                self.assertEqual(state[context_id]["session_id"], new_id)
+                self.assertEqual([row[0] for row in state[history_id]], ["New chat question"])
+                self.assertFalse(any("Old question" in p for p in self.knowledge.llm.prompts))
+            finally:
+                release.set()
+                await old
+
+        with patch("parallel_search.build_opener", return_value=server):
+            asyncio.run(run())
 
 
 if __name__ == "__main__":

@@ -202,8 +202,13 @@ def init_model():
         return """模型未成功加载，请重新选择模型后点击"重新加载模型"按钮"""
 
 
-def clear_session():
-    return '', None, {}
+def clear_session(search_context=None):
+    if search_context is None:
+        search_context = {}
+    # In-flight callbacks hold this same per-session dictionary. Clear it in
+    # place so they can observe the reset instead of restoring an old identity.
+    search_context.clear()
+    return '', None, search_context
 
 
 def reinit_model(large_language_model, embedding_model, history):
@@ -239,22 +244,27 @@ def predict(input,
         history = []
     if search_context is None:
         search_context = {}
+    conversation_id = search_context.setdefault("session_id", str(uuid4()))
 
     if use_web == 'True':
         if search_provider == "Parallel":
             # Gradio owns this dictionary per browser session. Keep the identity
             # through follow-ups and failures; clearing history replaces it.
-            session_id = search_context.setdefault("session_id", str(uuid4()))
+            session_id = conversation_id
         else:
             session_id = None
         try:
             web_content = search_web(query=input, provider=search_provider,
                                      session_id=session_id)
         except ParallelSearchError as exc:
+            if search_context.get("session_id") != conversation_id:
+                return (gr.skip(),) * 4
             return input, update_status(history, str(exc)), history, search_context
     else:
         web_content = ''
 
+    if search_context.get("session_id") != conversation_id:
+        return (gr.skip(),) * 4
     resp = knowladge_based_chat_llm.get_knowledge_based_answer(
         query=input,
         web_content=web_content,
@@ -263,6 +273,8 @@ def predict(input,
         temperature=temperature,
         top_p=top_p,
         history=history)
+    if search_context.get("session_id") != conversation_id:
+        return (gr.skip(),) * 4
     history.append((input, resp['result']))
     return '', history, history, search_context
 
@@ -367,7 +379,7 @@ if __name__ == "__main__":
                        ],
                        outputs=[message, chatbot, state, search_context])
             clear_history.click(fn=clear_session,
-                                inputs=[],
+                                inputs=[search_context],
                                 outputs=[chatbot, state, search_context],
                                 queue=False)
 
