@@ -20,6 +20,20 @@
 
 在terminal中执行命令: `python3 app.py`
 
+启动后如需联网检索，先将 **Web Search** 设置为 `True`，再在
+**Web Search Provider** 中选择 `Parallel`。它通过
+[Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp)
+匿名搜索，无需账号或 API Key，搜索使用 Fast 模式。返回的来源链接和摘要会与本地知识库
+一起提供给模型回答问题。仍需先上传知识库文件并完成向量化。
+
+默认仍为 `Web Search=False`，默认提供方仍为 `DuckDuckGo`；选择 `Parallel` 不会开启联网权限。
+Parallel 不使用 DuckDuckGo 的本地 SOCKS 代理设置，也不会读取环境中的 Parallel API Key。
+启用后，问题会发送至 `https://search.parallel.ai/mcp`；若需要代理，可使用标准
+`HTTPS_PROXY` 环境变量。免费匿名服务有使用额度，连接或搜索失败会显示错误，
+不会自动切换提供方。可重试，或手动选择 DuckDuckGo。
+同一对话会复用一个随机检索标识，点击清除历史对话后重新生成。
+HTTP 请求的超时为每次 20 秒；此同步检索没有新增中止按钮。
+
 * ModelScope版本
 
 1. 进入modelscope文件目录：`cd modelscope`

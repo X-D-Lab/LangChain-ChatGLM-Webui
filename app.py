@@ -1,4 +1,5 @@
 import os
+from uuid import uuid4
 from typing import List
 
 import gradio as gr
@@ -16,6 +17,7 @@ from langchain_community.vectorstores import FAISS
 from chatllm import ChatLLM
 from chinese_text_splitter import ChineseTextSplitter
 from config import *
+from parallel_search import ParallelSearchError, search_parallel
 import torch
 
 nltk.data.path = [os.path.join(os.path.dirname(__file__), "nltk_data")
@@ -37,7 +39,12 @@ for i in llm_model_dict:
         llm_model_list.append(j)
 
 
-def search_web(query):
+def search_web(query, provider="DuckDuckGo", session_id=None):
+
+    if provider == "Parallel":
+        return search_parallel(query, session_id or str(uuid4()))
+    if provider != "DuckDuckGo":
+        raise ValueError("Unknown web search provider: {}".format(provider))
 
     SESSION.proxies = {
         "http": f"socks5h://localhost:7890",
@@ -122,7 +129,7 @@ class KnowledgeBasedChatLLM:
         if web_content:
             prompt_template = f"""基于以下已知信息，简洁和专业的来回答用户的问题。
                                 如果无法从中得到答案，请说 "根据已知信息无法回答该问题" 或 "没有提供足够的相关信息"，不允许在答案中添加编造成分，答案请使用中文。
-                                已知网络检索内容：{web_content}""" + """
+                                已知网络检索内容：{web_content}""".replace("{", "{{").replace("}", "}}") + """
                                 已知内容:
                                 {context}
                                 问题:
@@ -196,7 +203,7 @@ def init_model():
 
 
 def clear_session():
-    return '', None
+    return '', None, {}
 
 
 def reinit_model(large_language_model, embedding_model, history):
@@ -225,12 +232,26 @@ def predict(input,
             history_len,
             temperature,
             top_p,
-            history=None):
+            history=None,
+            search_provider="DuckDuckGo",
+            search_context=None):
     if history == None:
         history = []
+    if search_context is None:
+        search_context = {}
 
     if use_web == 'True':
-        web_content = search_web(query=input)
+        if search_provider == "Parallel":
+            # Gradio owns this dictionary per browser session. Keep the identity
+            # through follow-ups and failures; clearing history replaces it.
+            session_id = search_context.setdefault("session_id", str(uuid4()))
+        else:
+            session_id = None
+        try:
+            web_content = search_web(query=input, provider=search_provider,
+                                     session_id=session_id)
+        except ParallelSearchError as exc:
+            return input, update_status(history, str(exc)), history, search_context
     else:
         web_content = ''
 
@@ -243,12 +264,10 @@ def predict(input,
         top_p=top_p,
         history=history)
     history.append((input, resp['result']))
-    return '', history, history
-
-
-model_status = init_model()
+    return '', history, history, search_context
 
 if __name__ == "__main__":
+    model_status = init_model()
     block = gr.Blocks()
     with block as demo:
 
@@ -312,12 +331,17 @@ if __name__ == "__main__":
                 use_web = gr.Radio(["True", "False"],
                                    label="Web Search",
                                    value="False")
+                search_provider = gr.Dropdown(
+                    ["DuckDuckGo", "Parallel"],
+                    label="Web Search Provider",
+                    value="DuckDuckGo")
 
             with gr.Column(scale=4):
                 chatbot = gr.Chatbot([[None, model_status.value]],
                                      label='ChatLLM').style(height=750)
                 message = gr.Textbox(label='请输入问题')
                 state = gr.State()
+                search_context = gr.State({})
 
                 with gr.Row():
                     clear_history = gr.Button("🧹 清除历史对话")
@@ -339,20 +363,20 @@ if __name__ == "__main__":
             send.click(predict,
                        inputs=[
                            message, use_web, top_k, history_len, temperature,
-                           top_p, state
+                           top_p, state, search_provider, search_context
                        ],
-                       outputs=[message, chatbot, state])
+                       outputs=[message, chatbot, state, search_context])
             clear_history.click(fn=clear_session,
                                 inputs=[],
-                                outputs=[chatbot, state],
+                                outputs=[chatbot, state, search_context],
                                 queue=False)
 
             message.submit(predict,
                            inputs=[
                                message, use_web, top_k, history_len,
-                               temperature, top_p, state
+                               temperature, top_p, state, search_provider, search_context
                            ],
-                           outputs=[message, chatbot, state])
+                           outputs=[message, chatbot, state, search_context])
         gr.Markdown("""提醒：<br>
         1. 使用时请先上传自己的知识文件，并且文件中不含某些特殊字符，否则将返回error. <br>
         2. 有任何使用问题，请通过[Github Issue区](https://github.com/thomas-yanxin/LangChain-ChatGLM-Webui/issues)进行反馈. <br>
